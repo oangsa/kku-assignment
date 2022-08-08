@@ -1,0 +1,6 @@
+Max score = 80.00
+Min score = 13.00
+Avg score = 57.98
+Median score = 63.00
+Mode score = 78.00
+Number of students who pass the exam = 68.00
