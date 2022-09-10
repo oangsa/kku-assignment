@@ -91,6 +91,6 @@ while True:
         area.ellipse_area()
     elif select == "6":
         print("Exit...")
-        exit()    
+        exit()
     
     input("Press Enter to return...")

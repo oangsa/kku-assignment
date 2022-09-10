@@ -16,5 +16,3 @@ print("You have {} thing(s) to do:\n".format(count))
 for i in range(count):
     print(sortednames[i])
     print("* {}\n".format(to_do[sortednames[i]]))
-
-#pass

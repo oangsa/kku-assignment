@@ -6,4 +6,5 @@ W = [w1, w2, w3]
 
 U = [V[i] + W[i] for i in range(3)]
 
-print("The sum of the vectors is: ", U)
+print(f'v1: {V}\nv2: {W}')
+print("v1 + v2: ", U)
