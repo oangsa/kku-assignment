@@ -11,11 +11,10 @@ class user_pass:
         self.password = password
 
     
-
+#DB
 cluster = MongoClient("mongodb+srv://oangsa:oangsa58528@miniproject.c9yxi6i.mongodb.net/?retryWrites=true&w=majority")
 db = cluster["test"]
 collection = db["test"]
-
 
 def register():
     username = input("Username: ")
@@ -30,7 +29,11 @@ def register():
         
     if collection.find_one({"username":myData.username}):
         print("This username is already exist.")
-        register()
+        x = input("Do you want to login instead?(Y/N): ")
+        if x.lower() == "y":
+            login()
+        elif x.lower() == "n":
+            register()
     else:
         collection.insert_one({"_id":i,"username":myData.username,"password":myData.password, "scores":0})
         print(f'Successfully created "{username}"')
@@ -53,8 +56,19 @@ def login():
             username = input("Username: ")
             password = input("Password: ")
         print(f'Logged as {res["username"]}!')
-        easyMode()
-        return username
+        while True:
+            quest = input("Select difficulties (easy, normal, hard) or check your best scores(score): ")
+            if quest.lower() == "easy":  
+                easyMode()
+                break
+            elif quest.lower() == "normal":
+                print("You've selected a normal mode.")
+                break
+            elif quest.lower() == "hard":
+                print("You've selected a hard mode.")
+                break
+            elif quest.lower() == "score":
+                print(f'Your current scores is: {res["scores"]}')
     else:
         print("This username is not exist.")
         login() 
@@ -84,7 +98,11 @@ def easyMode():
         else:
             filter = {"username":myData.username}
             scores = {'$set':{"scores":myscore.score}}
-            collection.update_one(filter, scores)
+            res = collection.find_one({"username":myData.username})
+            if myscore.score > res["scores"]:
+                collection.update_one(filter, scores)
+            else:
+                pass
             print("Incorrect.")
             print("Total Score(s):", myscore.score)
             break
