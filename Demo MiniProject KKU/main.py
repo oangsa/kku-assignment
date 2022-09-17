@@ -35,7 +35,7 @@ def register():
         elif x.lower() == "n":
             register()
     else:
-        collection.insert_one({"_id":i,"username":myData.username,"password":myData.password, "scores":0})
+        collection.insert_one({"_id":i,"username":myData.username,"password":myData.password, "highest_scores":0, "lastest_scores":0})
         print(f'Successfully created "{username}"')
         easyMode()
       
@@ -71,7 +71,11 @@ def login():
                 print(f'Your current scores is: {res["scores"]}')
     else:
         print("This username is not exist.")
-        login() 
+        x = input("Do you want to Register instead?(Y/N): ")
+        if x.lower() == "y":
+            register()
+        elif x.lower() == "n":
+            login()
 
 
 def easyMode():
@@ -97,19 +101,26 @@ def easyMode():
             myscore.score += 1
         else:
             filter = {"username":myData.username}
-            scores = {'$set':{"scores":myscore.score}}
+            high_scores = {'$set':{"highest_scores":myscore.score}}
+            current_scores = {'$set':{"lastest_scores":myscore.score}}
             res = collection.find_one({"username":myData.username})
-            if myscore.score > res["scores"]:
-                collection.update_one(filter, scores)
+            if myscore.score > res["highest_scores"]:
+                collection.update_one(filter, high_scores)
             else:
                 pass
+            collection.update_one(filter, current_scores)
             print("Incorrect.")
             print("Total Score(s):", myscore.score)
             break
 
-ask = input("Login or Register: ")
+while True:          
+    ask = input("Login or Register: ")
 
-if ask.lower() == "login" or ask.lower() == "l":
-    login()
-elif ask.lower() == "register" or  ask.lower() == "re":
-    register()
+    if ask.lower() == "login" or ask.lower() == "l":
+        login()
+        break
+    elif ask.lower() == "register" or  ask.lower() == "re":
+        register()
+        break
+    else:
+        print("Invalid command.")

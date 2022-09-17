@@ -384,81 +384,151 @@ root.geometry("700x600")
 root.config(background="#ffffff")
 root.resizable(0,0)
 
-def easyIspressed():
-    labeltext.destroy()
-    btnStartEasy.destroy()
-    btnStartNormal.destroy()
-    btnStartHard.destroy()
-    lblInstruction.destroy()
-    easyStart()
+def menu():
 
-def normalIspressed():
-    labeltext.destroy()
-    btnStartEasy.destroy()
-    btnStartNormal.destroy()
-    btnStartHard.destroy()
-    lblInstruction.destroy()
-    normalStart()
+    def easyIspressed():
+        labeltext.destroy()
+        btnStartEasy.destroy()
+        btnStartNormal.destroy()
+        btnStartHard.destroy()
+        lblInstruction.destroy()
+        easyStart()
 
-def hardIspressed():
-    labeltext.destroy()
-    btnStartEasy.destroy()
-    btnStartNormal.destroy()
-    btnStartHard.destroy()
-    lblInstruction.destroy()
-    hardStart()
+    def normalIspressed():
+        labeltext.destroy()
+        btnStartEasy.destroy()
+        btnStartNormal.destroy()
+        btnStartHard.destroy()
+        lblInstruction.destroy()
+        normalStart()
 
-labeltext = Label(
+    def hardIspressed():
+        labeltext.destroy()
+        btnStartEasy.destroy()
+        btnStartNormal.destroy()
+        btnStartHard.destroy()
+        lblInstruction.destroy()
+        hardStart()
+
+    labeltext = Label(
+        root,
+        text = "Super Math Quiz",
+        font = ("Comic sans MS",24,"bold"),
+        background = "#ffffff"
+    )
+    labeltext.pack(pady=(30,10))
+
+    easy = PhotoImage(file="easy.png")
+
+    btnStartEasy = Button(
+        root,
+        image = easy,
+        relief = FLAT,
+        border = 0,
+        command = easyIspressed,
+        background = "#ffffff"
+    )
+    btnStartEasy.pack(pady=(10,0))
+
+    normal = PhotoImage(file="normal.png")
+
+    btnStartNormal = Button(
+        root,
+        image = normal,
+        relief = FLAT,
+        border = 0,
+        command = normalIspressed,
+        background = "#ffffff"
+    )
+    btnStartNormal.pack(pady=(10,0))
+
+    hard = PhotoImage(file="hard.png")
+
+    btnStartHard = Button(
+        root,
+        image = hard,
+        relief = FLAT,
+        border = 0,
+        command = hardIspressed,
+        background = "#ffffff"
+    )
+    btnStartHard.pack(pady=(10,20))
+
+    lblInstruction = Label(
+        root,
+        text = "Math Quiz is a great way to check your math skills! \n Children pick from four math quizzes: Addition, Subtraction, Multiplication & Division.",
+        font = ("Consolas",8),
+        justify = "center",
+        background = "#ffffff"
+    )
+    lblInstruction.pack()
+
+def loginIspressed():
+
+    def logindestroy():
+        logusername.destroy()
+        logEnUsername.destroy()
+        logpassword.destroy()
+        logEnPassword.destroy()
+        btnGoLogin.destroy()
+        menu()
+
+    btnLogin.destroy()
+    btnRegister.destroy()
+    logusername = Label(
+        root,
+        text = "USERNAME:",
+        font = ("Courier", 16),
+        background = "#ffffff"
+    )
+    logusername.place(relx=0.2, rely=0.3)
+
+    logEnUsername = Entry(
+        root,
+        font = ("Courier", 16))
+    logEnUsername.place(relx=0.38, rely=0.3, relwidth=0.34, relheight=0.05)
+
+    logpassword = Label(
+        root,
+        text = "PASSWORD:",
+        font = ("Courier", 16),
+        background = "#ffffff"
+    )
+    logpassword.place(relx=0.2, rely=0.37)
+
+    logEnPassword = Entry(
+        root,
+        font = ("Courier", 16))
+    logEnPassword.place(relx=0.38, rely=0.37, relwidth=0.34, relheight=0.05)
+
+    btnGoLogin = Button(
+        root,
+        text = "LOGIN",
+        font = ("Courier", 16),
+        command = logindestroy,
+        background = "#ffffff"
+    )
+    btnGoLogin.place(relx=0.42, rely=0.6)
+
+def registerIspressed():
+    print("xd")
+
+btnLogin = Button(
     root,
-    text = "Super Math Quiz",
-    font = ("Comic sans MS",24,"bold"),
+    text = "LOGIN",
+    font = ("Courier", 16),
+    command = loginIspressed,
     background = "#ffffff"
 )
-labeltext.pack(pady=(30,10))
+btnLogin.place(relx=0.35, rely=0.15)
 
-easy = PhotoImage(file="easy.png")
-
-btnStartEasy = Button(
+btnRegister = Button(
     root,
-    image = easy,
-    relief = FLAT,
-    border = 0,
-    command = easyIspressed,
+    text = "REGISTER",
+    font = ("Courier", 16),
+    command = registerIspressed,
     background = "#ffffff"
 )
-btnStartEasy.pack(pady=(10,0))
-
-normal = PhotoImage(file="normal.png")
-
-btnStartNormal = Button(
-    root,
-    image = normal,
-    relief = FLAT,
-    border = 0,
-    command = normalIspressed,
-    background = "#ffffff"
-)
-btnStartNormal.pack(pady=(10,0))
-
-hard = PhotoImage(file="hard.png")
-
-btnStartHard = Button(
-    root,
-    image = hard,
-    relief = FLAT,
-    border = 0,
-    command = hardIspressed,
-    background = "#ffffff"
-)
-btnStartHard.pack(pady=(10,20))
-
-lblInstruction = Label(
-    root,
-    text = "Math Quiz is a great way to check your math skills! \n Children pick from four math quizzes: Addition, Subtraction, Multiplication & Division.",
-    font = ("Consolas",8),
-    justify = "center",
-    background = "#ffffff"
-)
-lblInstruction.pack()
+btnRegister.place(relx=0.48, rely=0.15)
 
 root.mainloop()
