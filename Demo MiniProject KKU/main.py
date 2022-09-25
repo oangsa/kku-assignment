@@ -42,13 +42,9 @@ def register():
 def login():
     username = input("Username: ")
     password = input("Password: ")
-    i = 0
     global myData
     myData = user_pass(username, password)
     res = collection.find_one({"username":myData.username})
-    result = collection.find({})
-    for x in result:
-        i = i+1
 
     if collection.find_one({"username":myData.username}): 
         while res["password"] != password or res["username"] != username :
