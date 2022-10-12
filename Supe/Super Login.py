@@ -606,7 +606,6 @@ def loginIspressed():
                     logEnUsername.delete(0, END)
                     logEnPassword.delete(0, END)
                     myErr.err = 1
-                    # print(f"myErr.err: {myErr.err}\nmyErr.Err: {myErr.Err}")
                     if myErr.Err == 1:
                         Err.destroy()
                 else:
@@ -624,7 +623,6 @@ def loginIspressed():
                 logEnUsername.delete(0, END)
                 logEnPassword.delete(0, END)
                 myErr.Err = 1
-                # print(f"myErr.err: {myErr.err}\nmyErr.Err: {myErr.Err}")
                 if myErr.err == 1:
                     err.destroy()
         
@@ -638,6 +636,7 @@ def loginIspressed():
             logpassword.destroy()
             logEnPassword.destroy()
             btnGoLogin.destroy()
+            messagebox.showinfo(title="Success", message="Loggedin Success!")
             menu()
         else:
             pass
@@ -684,12 +683,15 @@ def loginIspressed():
 
 def registerIspressed():
     class check_shit:
-        def __init__(self, lenErr, numErr, lowCharErr, upperCharErr):
+        def __init__(self, lenErr, numErr, lowCharErr, upperCharErr, invalidErr, noDataErr, usedErr):
             self.lenErr = lenErr
             self.numErr = numErr
             self.lowCharErr = lowCharErr
             self.upperCharErr = upperCharErr
-    my_shit = check_shit(0,0,0,0)
+            self.invalidErr = invalidErr,
+            self.noDataErr = noDataErr,
+            self.usedErr = usedErr
+    my_shit = check_shit(0,0,0,0,0,0,0)
     def check_secure():
         global lenerr, Numerr, low_char_err, upper_charerr
         password = RegEnPassword.get()
@@ -705,7 +707,7 @@ def registerIspressed():
             font = ("Courier", 16),
             background = "#ffffff"
             )
-            lenerr.place(relx=0.263, rely=0.5)
+            lenerr.place(relx=0.190, rely=0.5)
             my_shit.lenErr = 1
             if my_shit.upperCharErr == 1:
                 upper_charerr.destroy()
@@ -724,7 +726,7 @@ def registerIspressed():
             font = ("Courier", 16),
             background = "#ffffff"
             )
-            Numerr.place(relx=0.097, rely=0.5)
+            Numerr.place(relx=0.099, rely=0.5)
             my_shit.numErr = 1
             if my_shit.upperCharErr == 1:
                 upper_charerr.destroy()
@@ -785,9 +787,8 @@ def registerIspressed():
         return secure_pass
     
     def registerdestroy():
-        global regData
+        global regData, invalidUser, err3, err
         regData = user_pass(RegEnUsername.get(), RegEnPassword.get())
-        res = collection.find_one({"username":regData.username})
         if regData.username != "" or regData.password != "":
             if collection.find_one({"username":regData.username}):
                 err = Label(
@@ -796,53 +797,72 @@ def registerIspressed():
                     fg="red",
                     font = ("Courier", 16),
                     background = "#ffffff"
-                    )
+                )
                 err.place(relx=0.263, rely=0.5)
+                my_shit.usedErr = 1
+                if my_shit.noDataErr == 1:
+                    err3.destroy()
+                if my_shit.invalidErr == 1:
+                    invalidUser.destroy()
                 RegEnUsername.delete(0, END)
                 RegEnPassword.delete(0, END)
             else:
                 if regData.username == "" and regData != "":
-                    userErr = Label(
-                    root,
-                    text = "Username is invalid.",
-                    fg="red",
-                    font = ("Courier", 16),
-                    background = "#ffffff"
+                    invalidUser = Label(
+                        root,
+                        text = "Username is invalid.",
+                        fg="red",
+                        font = ("Courier", 16),
+                        background = "#ffffff"
                     )
-                    userErr.place(relx=0.263, rely=0.5)
+                    invalidUser.place(relx=0.320, rely=0.5)
+                    my_shit.invalidErr = 1
+                    if my_shit.noDataErr == 1:
+                        err3.destroy()
+                    if my_shit.usedErr == 1:
+                        err.destroy()
                 i = 0
                 result = collection.find({})
                 for x in result:
                     i = i+1
                 if check_secure() == True:
                     if regData.username == "" and regData != "":
-                        userErr = Label(
-                        root,
-                        text = "Please enter a username.",
-                        fg="red",
-                        font = ("Courier", 16),
-                        background = "#ffffff"
-                        )
-                        userErr.place(relx=0.263, rely=0.5)
+                        invalidUser.place(relx=0.320, rely=0.5)
+                        my_shit.invalidErr = 1
+                        if my_shit.noDataErr == 1:
+                            err3.destroy()
+                        if my_shit.usedErr == 1:
+                            err.destroy()
                     else:
-                        userErr.destroy()
                         collection.insert_one({"_id":i,"username":regData.username,"password":regData.password, "highest_scores":0, "lastest_scores":0})
                         logusername.destroy()
                         RegEnUsername.destroy()
                         regpassword.destroy()
                         RegEnPassword.destroy()
                         btnGoReg.destroy()
-                        messagebox.showinfo("Registered Success!")
+                        if my_shit.noDataErr == 1:
+                            err3.destroy()
+                        if my_shit.usedErr == 1:
+                            err.destroy()
+                        if my_shit.invalidErr == 1:
+                            invalidUser.destroy()
+                        messagebox.showinfo(title="Success", message="Registered success!")
                         menu()
         else:
             err3 = Label(
-            root,
-            text = "Please enter all of entry.",
-            fg="red",
-            font = ("Courier", 16),
-            background = "#ffffff"
+                root,
+                text = "Please enter all of entry.",
+                fg="red",
+                font = ("Courier", 16),
+                background = "#ffffff"
             )
             err3.place(relx=0.263, rely=0.5)
+            my_shit.noDataErr = 1
+            if my_shit.usedErr == 1:
+                err.destroy()
+            if my_shit.invalidErr == 1:
+                invalidUser.destroy()
+
     
     btnLogin.destroy()
     btnRegister.destroy()
