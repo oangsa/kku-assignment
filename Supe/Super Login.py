@@ -1,13 +1,10 @@
-from genericpath import exists
+import string, json, tkinter, secrets
 import random as rd
-import secrets
 import math as m
-from tkinter import *
-import tkinter
-from tkinter import messagebox
+from genericpath import exists
 from pymongo import MongoClient
-import string
-import json
+from tkinter import *
+from tkinter import messagebox
 
 with open('env.json') as d:
     dictData = json.load(d)
@@ -352,7 +349,7 @@ def hardStart():
                 font=("Courier", 16))
             wrong_score.place(relx=0.413, rely=0.305)
             if exist == True:
-                filter = {"username":regData.username}
+                filter = {'username':regData.username}
                 high_scores = {'$set':{"highest_scores":hd.score}}
                 current_scores = {'$set':{"lastest_scores":hd.score}}
                 res = collection.find_one({"username":regData.username})
@@ -577,7 +574,6 @@ def menu():
     lblInstruction.pack()
 
 def loginIspressed():
-    
     class check_valid:
             def __init__(self, Err, err):
                 self.Err = Err
@@ -596,11 +592,11 @@ def loginIspressed():
                 
                 if res["password"] != password or res["username"] != username:
                     err = Label(
-                    root,
-                    text = "Username or Password is invalid.",
-                    fg="red",
-                    font = ("Courier", 16),
-                    background = "#ffffff"
+                        root,
+                        text = "Username or Password is invalid.",
+                        fg="red",
+                        font = ("Courier", 16),
+                        background = "#ffffff"
                     )
                     err.place(relx=0.21, rely=0.5)
                     logEnUsername.delete(0, END)
@@ -613,11 +609,11 @@ def loginIspressed():
                     return log_pass
             else:
                 Err = Label(
-                root,
-                text = "Please enter your Username and Password.",
-                fg="red",
-                font = ("Courier", 16),
-                background = "#ffffff"
+                    root,
+                    text = "Please enter your Username and Password.",
+                    fg="red",
+                    font = ("Courier", 16),
+                    background = "#ffffff"
                 )
                 Err.place(relx=0.13, rely=0.5)
                 logEnUsername.delete(0, END)
@@ -638,8 +634,6 @@ def loginIspressed():
             btnGoLogin.destroy()
             messagebox.showinfo(title="Success", message="Loggedin Success!")
             menu()
-        else:
-            pass
         
     btnLogin.destroy()
     btnRegister.destroy()
@@ -701,11 +695,11 @@ def registerIspressed():
         number = any([1 if c in string.digits else 0 for c in password])        
         if len(password) < 6:
             lenerr = Label(
-            root,
-            text = "Password must be 6 charactors long.",
-            fg="red",
-            font = ("Courier", 16),
-            background = "#ffffff"
+                root,
+                text = "Password must be 6 charactors long.",
+                fg="red",
+                font = ("Courier", 16),
+                background = "#ffffff"
             )
             lenerr.place(relx=0.190, rely=0.5)
             my_shit.lenErr = 1
@@ -720,11 +714,11 @@ def registerIspressed():
         
         if number == False:
             Numerr = Label(
-            root,
-            text = "Password must be contain at least 1 number.",
-            fg="red",
-            font = ("Courier", 16),
-            background = "#ffffff"
+                root,
+                text = "Password must be contain at least 1 number.",
+                fg="red",
+                font = ("Courier", 16),
+                background = "#ffffff"
             )
             Numerr.place(relx=0.099, rely=0.5)
             my_shit.numErr = 1
@@ -739,11 +733,11 @@ def registerIspressed():
 
         if lower_case == False:
             low_char_err = Label(
-            root,
-            text = "Password must be contain at least 1 character.",
-            fg="red",
-            font = ("Courier", 16),
-            background = "#ffffff"
+                root,
+                text = "Password must be contain at least 1 character.",
+                fg="red",
+                font = ("Courier", 16),
+                background = "#ffffff"
             )
             low_char_err.place(relx=0.07, rely=0.5)
             my_shit.lowCharErr = 1
