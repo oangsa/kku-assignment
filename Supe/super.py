@@ -5,7 +5,6 @@ from genericpath import exists
 from pymongo import MongoClient
 from tkinter import *
 from tkinter import messagebox
-import keyboard
 
 with open('env.json') as d:
     dictData = json.load(d)
@@ -169,7 +168,6 @@ def easyStart():
         font = ("Courier", 16),
         command=lambda: submt(solving))
     submit.place(relx=0.35, rely=0.64, relwidth=0.34, relheight=0.23)
-    keyboard.on_press_key("a", lambda _:submt(solving))
 
 def normalStart():
     def submt(var1):
@@ -317,7 +315,6 @@ def normalStart():
         font = ("Courier", 16),
         command=lambda: submt(solving))
     submit.place(relx=0.35, rely=0.64, relwidth=0.34, relheight=0.23)
-    keyboard.on_press_key("enter", lambda _: submt(solving))
 
 
 
@@ -467,7 +464,6 @@ def hardStart():
         font = ("Courier", 16),
         command=lambda: submt(solving))
     submit.place(relx=0.35, rely=0.64, relwidth=0.34, relheight=0.23)
-    keyboard.on_press_key("enter", lambda _: submt(solving))
 
 
 root = tkinter.Tk()

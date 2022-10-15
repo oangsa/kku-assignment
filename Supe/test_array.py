@@ -1,8 +1,6 @@
-from cProfile import label
 from pymongo import MongoClient
 import json
 from tkinter import *
-from tkinter import ttk
 
 
 with open('env.json') as d:
@@ -19,7 +17,7 @@ lst = []
 for i in res:
     u = i["username"]
     s = i["highest_scores"]
-    lst.append(f"name: {u}, Scores: {s}")
+    lst.append(f"Username: {u}, Scores: {s}")
 
 print(lst)
 
@@ -31,9 +29,8 @@ root.resizable(0,0)
 
 label = Label(
     root,
-    text="Wrong!!!",
     fg="red",
     font=("Mali", 16))
-label.config(text=("\n".join(lst)))
-label.place(relx=0.435, rely=0.17)
+label.config(text=("TOP 5 HIGHEST SCORE:\n\n"+"\n\n".join(lst)))
+label.place(relx=0.280, rely=0.17)
 root.mainloop()
