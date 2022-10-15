@@ -81,6 +81,7 @@ def easyStart():
                     pass
                 collection.update_one(filter, current_scores)
                 root.after(3000, destroy)
+        
     
     def try_again():
         solving.delete(0,END)
@@ -168,10 +169,9 @@ def easyStart():
         font = ("Courier", 16),
         command=lambda: submt(solving))
     submit.place(relx=0.35, rely=0.64, relwidth=0.34, relheight=0.23)
-    keyboard.on_press_key("enter", lambda _: submt(solving))
+    keyboard.on_press_key("a", lambda _:submt(solving))
 
 def normalStart():
-
     def submt(var1):
         if var1.get() == str(resultPLUS()):
             correct = Label(
@@ -322,7 +322,6 @@ def normalStart():
 
 
 def hardStart():
-
     def submt(var1):
         if var1.get() == str(resultPLUS()):
             correct = Label(
@@ -471,13 +470,6 @@ def hardStart():
     keyboard.on_press_key("enter", lambda _: submt(solving))
 
 
-    # try_again = Button(
-    #     root,
-    #     text = "Try Again",
-    #     font = ("Courier", 16),
-    #     command = try_again)
-    # try_again.place(relx=0.42, rely=0.9)
-
 root = tkinter.Tk()
 root.title("Super Quiz")
 root.geometry("700x600")
@@ -595,7 +587,6 @@ def loginIspressed():
             btnGoLogin.destroy()
             # messagebox.showinfo(title="Success", message="Loggedin Success!")
             menu()
-    keyboard.on_press_key("enter", lambda _:logindestroy())   
     btnLogin.destroy()
     btnRegister.destroy()
     logusername = Label(
@@ -694,7 +685,8 @@ def registerIspressed():
                         menu()
         else:
             messagebox.showerror(title="Error", message="Please enter all of entry")
-    keyboard.on_press_key("enter", lambda _:registerdestroy())
+
+    
     btnLogin.destroy()
     btnRegister.destroy()
     logusername = Label(
