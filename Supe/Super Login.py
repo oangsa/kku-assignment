@@ -1,3 +1,4 @@
+from operator import truediv
 import string, json, tkinter, secrets
 import random as rd
 import math as m
@@ -21,13 +22,17 @@ class user_pass:
     def __init__(self, username , password):
         self.username = username
         self.password = password
-        
+
+class check_shitv2:
+    def __init__(self, reg):
+        self.reg = reg
+
+regis = check_shitv2(0)
+
 ez = score(0)
 nm = score(0)
 hd = score(0)
 
-global exist, data
-exist = exists("regData")
 def destroy():
     root.destroy()
 def easyStart():
@@ -40,6 +45,7 @@ def easyStart():
                 font=("Courier", 16))
             correct.place(relx=0.435, rely=0.17)
             ez.score += 1
+            root.after(500, try_again)
         else:
             wrong = Label(
                 root,
@@ -53,7 +59,7 @@ def easyStart():
                 fg="black",
                 font=("Courier", 16))
             wrong_score.place(relx=0.413, rely=0.305)
-            if exist == True:
+            if regis.reg == 1:
                 filter = {"username":regData.username}
                 high_scores = {'$set':{"highest_scores":ez.score}}
                 current_scores = {'$set':{"lastest_scores":ez.score}}
@@ -75,6 +81,7 @@ def easyStart():
                     pass
                 collection.update_one(filter, current_scores)
                 root.after(3000, destroy)
+    
     def try_again():
         solving.delete(0,END)
         try_again.num1update = rd.randint(0,999)
@@ -162,12 +169,13 @@ def easyStart():
         command=lambda: submt(solving))
     submit.place(relx=0.35, rely=0.64, relwidth=0.34, relheight=0.23)
 
-    try_again = Button(
-        root,
-        text = "Try Again",
-        font = ("Courier", 16),
-        command = try_again)
-    try_again.place(relx=0.42, rely=0.9)
+    # try_again = Button(
+    #     root,
+    #     text = "Try Again",
+    #     font = ("Courier", 16),
+    #     command = try_again
+    # )
+    # try_again.place(relx=0.42, rely=0.9)
 
 def normalStart():
 
@@ -180,6 +188,7 @@ def normalStart():
                 font=("Courier", 16))
             correct.place(relx=0.435, rely=0.17)
             nm.score += 2
+            root.after(500, try_again)
         else:
             wrong = Label(
                 root,
@@ -193,7 +202,7 @@ def normalStart():
                 fg="black",
                 font=("Courier", 16))
             wrong_score.place(relx=0.413, rely=0.305)
-            if exist == True:
+            if regis.reg == 1:
                 filter = {"username":regData.username}
                 high_scores = {'$set':{"highest_scores":nm.score}}
                 current_scores = {'$set':{"lastest_scores":nm.score}}
@@ -316,12 +325,12 @@ def normalStart():
         command=lambda: submt(solving))
     submit.place(relx=0.35, rely=0.64, relwidth=0.34, relheight=0.23)
 
-    try_again = Button(
-        root,
-        text = "Try Again",
-        font = ("Courier", 16),
-        command = try_again)
-    try_again.place(relx=0.42, rely=0.9)
+    # try_again = Button(
+    #     root,
+    #     text = "Try Again",
+    #     font = ("Courier", 16),
+    #     command = try_again)
+    # try_again.place(relx=0.42, rely=0.9)
 
 
 def hardStart():
@@ -335,6 +344,7 @@ def hardStart():
                 font=("Courier", 16))
             correct.place(relx=0.435, rely=0.17)
             hd.score += 3
+            root.after(500, try_again)
         else:
             wrong = Label(
                 root,
@@ -348,7 +358,7 @@ def hardStart():
                 fg="black",
                 font=("Courier", 16))
             wrong_score.place(relx=0.413, rely=0.305)
-            if exist == True:
+            if regis.reg == 1:
                 filter = {'username':regData.username}
                 high_scores = {'$set':{"highest_scores":hd.score}}
                 current_scores = {'$set':{"lastest_scores":hd.score}}
@@ -477,16 +487,16 @@ def hardStart():
         root,
         text = "Submit",
         font = ("Courier", 16),
-        command=lambda: submt(solving))
+        command=submt(solving))
     submit.place(relx=0.35, rely=0.64, relwidth=0.34, relheight=0.23)
-
+'''
     try_again = Button(
         root,
         text = "Try Again",
         font = ("Courier", 16),
         command = try_again)
     try_again.place(relx=0.42, rely=0.9)
-
+'''
 
 root = tkinter.Tk()
 root.title("Super Quiz")
@@ -632,7 +642,7 @@ def loginIspressed():
             logpassword.destroy()
             logEnPassword.destroy()
             btnGoLogin.destroy()
-            messagebox.showinfo(title="Success", message="Loggedin Success!")
+            # messagebox.showinfo(title="Success", message="Loggedin Success!")
             menu()
         
     btnLogin.destroy()
@@ -828,6 +838,7 @@ def registerIspressed():
                         if my_shit.usedErr == 1:
                             err.destroy()
                     else:
+                        regis.reg = 1
                         collection.insert_one({"_id":i,"username":regData.username,"password":regData.password, "highest_scores":0, "lastest_scores":0})
                         logusername.destroy()
                         RegEnUsername.destroy()
