@@ -359,7 +359,7 @@ def hardStart():
                 font=("Courier", 16))
             wrong_score.place(relx=0.413, rely=0.305)
             if regis.reg == 1:
-                filter = {"username":regData.username}
+                filter = {'username':regData.username}
                 high_scores = {'$set':{"highest_scores":hd.score}}
                 current_scores = {'$set':{"lastest_scores":hd.score}}
                 res = collection.find_one({"username":regData.username})
@@ -380,14 +380,13 @@ def hardStart():
                     pass
                 collection.update_one(filter, current_scores)
                 root.after(3000, destroy)
-            
 
 
     def try_again():
         solving.delete(0,END)
-        try_again.num1update = rd.randint(0,99999)
-        try_again.num2update = rd.randint(0,99999)
-        op_choices = ["+", "-", "*", "/", "^"]
+        try_again.num1update = rd.randint(0,9999999)
+        try_again.num2update = rd.randint(0,9999999)
+        op_choices = ["+", "-", "*", "/", "^", "sqrt"]
         try_again.op_rand = secrets.choice(op_choices)
         
         if try_again.op_rand == "+":
@@ -401,8 +400,8 @@ def hardStart():
             newQ.place(relx=0.16, rely=0.14, relwidth=0.7, relheight=0.23)
 
         if try_again.op_rand == "-":
-            try_again.num1update = rd.randint(0,9999)
-            try_again.num2update = rd.randint(0,999)
+            try_again.num1update = rd.randint(0,999999)
+            try_again.num2update = rd.randint(0,99999)
             try_again.ans = try_again.num1update - try_again.num2update
 
             newQ = Label(
@@ -413,8 +412,8 @@ def hardStart():
             newQ.place(relx=0.16, rely=0.14, relwidth=0.7, relheight=0.23)
 
         if try_again.op_rand == "*":
-            try_again.num1update = rd.randint(0,99)
-            try_again.num2update = rd.randint(0,9)
+            try_again.num1update = rd.randint(0,9999)
+            try_again.num2update = rd.randint(0,999)
             try_again.ans = try_again.num1update * try_again.num2update
 
             newQ = Label(
@@ -425,8 +424,8 @@ def hardStart():
             newQ.place(relx=0.16, rely=0.14, relwidth=0.7, relheight=0.23)
 
         if try_again.op_rand == "/":
-            try_again.num1update = rd.randint(0,99)
-            try_again.num2update = rd.randint(1,9)
+            try_again.num1update = rd.randint(0,9999)
+            try_again.num2update = rd.randint(1,999)
             try_again.ans = ("%.2f" % (try_again.num1update / try_again.num2update))
             newQ = Label(
                 root,
@@ -436,12 +435,22 @@ def hardStart():
             newQ.place(relx=0.16, rely=0.14, relwidth=0.7, relheight=0.23)
 
         if try_again.op_rand == "^":
-            try_again.num1update = rd.randint(0,99)
-            try_again.num2update = rd.randint(0,3)
+            try_again.num1update = rd.randint(0,30)
+            try_again.num2update = rd.randint(0,9)
             try_again.ans = try_again.num1update ** try_again.num2update
             newQ = Label(
                 root,
                 text=f"{try_again.num1update} ^ {try_again.num2update}",
+                font=("Courier", 16)
+            )
+            newQ.place(relx=0.16, rely=0.14, relwidth=0.7, relheight=0.23)
+
+        if try_again.op_rand == "sqrt":
+            try_again.num1update = rd.randint(1,999)
+            try_again.ans = ("%.2f" % (m.sqrt(try_again.num1update)))
+            newQ = Label(
+                root,
+                text=f"√{try_again.num1update}",
                 font=("Courier", 16)
             )
             newQ.place(relx=0.16, rely=0.14, relwidth=0.7, relheight=0.23)
@@ -480,14 +489,14 @@ def hardStart():
         font = ("Courier", 16),
         command=lambda: submt(solving))
     submit.place(relx=0.35, rely=0.64, relwidth=0.34, relheight=0.23)
-
-
-    # try_again = Button(
-    #     root,
-    #     text = "Try Again",
-    #     font = ("Courier", 16),
-    #     command = try_again)
-    # try_again.place(relx=0.42, rely=0.9)
+'''
+    try_again = Button(
+        root,
+        text = "Try Again",
+        font = ("Courier", 16),
+        command = try_again)
+    try_again.place(relx=0.42, rely=0.9)
+'''
 
 root = tkinter.Tk()
 root.title("Super Quiz")
