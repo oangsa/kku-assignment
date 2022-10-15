@@ -35,5 +35,5 @@ label = Label(
     fg="red",
     font=("Mali", 16))
 label.config(text=("\n".join(lst)))
-label.place(relx=0.435, rely=0.17)
+label.place(relx=0.5, rely=0.17)
 root.mainloop()

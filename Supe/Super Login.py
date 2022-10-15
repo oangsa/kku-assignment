@@ -1,4 +1,9 @@
+from cgitb import grey
 from operator import truediv
+import tkinter
+import tkinter.messagebox
+from turtle import bgcolor
+import customtkinter
 import string, json, tkinter, secrets
 import random as rd
 import math as m
@@ -6,6 +11,9 @@ from genericpath import exists
 from pymongo import MongoClient
 from tkinter import *
 from tkinter import messagebox
+
+customtkinter.set_appearance_mode("default")  # Modes: system (default), light, dark
+customtkinter.set_default_color_theme("blue")  # Themes: blue (default), dark-blue, green
 
 with open('env.json') as d:
     dictData = json.load(d)
@@ -36,29 +44,46 @@ hd = score(0)
 def destroy():
     root.destroy()
 def easyStart():
+    def goback():
+        solving.delete(0,END)
+        correct.destroy()
+        wrong.destroy()
+        wrong_score.destroy()
+        newQ.destroy()
+        easytext.destroy()
+        start.destroy()
+        solving.destroy()
+        submit.destroy()
+        btnBack.destroy()
+        menu()
+
     def submt(var1):
+        global correct, wrong, wrong_score
         if var1.get() == str(resultPLUS()):
-            correct = Label(
-                root,
+            correct = customtkinter.CTkLabel(
+                master=root,
                 text="Correct!",
-                fg="green",
-                font=("Courier", 16))
-            correct.place(relx=0.435, rely=0.17)
+                text_color="#79ae61",
+                fg_color=("#262626"),
+                text_font= ("Courier 16 bold"))
+            correct.place(relx=0.5, rely=0.17, anchor=customtkinter.CENTER)
             ez.score += 1
             root.after(500, try_again)
         else:
-            wrong = Label(
+            wrong = customtkinter.CTkLabel(
                 root,
                 text="Wrong!!!",
-                fg="red",
-                font=("Courier", 16))
-            wrong.place(relx=0.435, rely=0.17)
-            wrong_score = Label(
+                text_color="#c75d55",
+                fg_color=("#262626"),
+                text_font= ("Courier 16 bold"))
+            wrong.place(relx=0.5, rely=0.17, anchor=customtkinter.CENTER)
+            wrong_score = customtkinter.CTkLabel(
                 root,
                 text=f"You got {ez.score}!",
-                fg="black",
-                font=("Courier", 16))
-            wrong_score.place(relx=0.413, rely=0.305)
+                text_color="white",
+                fg_color=("#262626"),
+                text_font= ("Courier 16 bold"))
+            wrong_score.place(relx=0.5, rely=0.305, anchor=customtkinter.CENTER)
             if regis.reg == 1:
                 filter = {"username":regData.username}
                 high_scores = {'$set':{"highest_scores":ez.score}}
@@ -83,6 +108,8 @@ def easyStart():
                 root.after(3000, destroy)
     
     def try_again():
+        global newQ
+        newQ.destroy()
         solving.delete(0,END)
         try_again.num1update = rd.randint(0,999)
         try_again.num2update = rd.randint(0,999)
@@ -92,47 +119,55 @@ def easyStart():
         if try_again.op_rand == "+":
             try_again.ans = try_again.num1update + try_again.num2update
 
-            newQ = Label(
+            newQ = customtkinter.CTkLabel(
                 root,
                 text=f"{try_again.num1update} + {try_again.num2update}",
-                font=("Courier", 16)
+                fg_color=("#262626"),
+                corner_radius=6,
+                text_font= ("Courier 16 bold")
             )
-            newQ.place(relx=0.16, rely=0.14, relwidth=0.7, relheight=0.23)
+            newQ.place(relx=0.5, rely=0.25, relwidth=0.7, relheight=0.23, anchor=customtkinter.CENTER)
 
         if try_again.op_rand == "-":
             try_again.num1update = rd.randint(0,999)
             try_again.num2update = rd.randint(0,99)
             try_again.ans = try_again.num1update - try_again.num2update
 
-            newQ = Label(
+            newQ = customtkinter.CTkLabel(
                 root,
                 text=f"{try_again.num1update} - {try_again.num2update}",
-                font=("Courier", 16)
+                fg_color=("#262626"),
+                corner_radius=6,
+                text_font= ("Courier 16 bold")
             )
-            newQ.place(relx=0.16, rely=0.14, relwidth=0.7, relheight=0.23)
+            newQ.place(relx=0.5, rely=0.25, relwidth=0.7, relheight=0.23, anchor=customtkinter.CENTER)
 
         if try_again.op_rand == "*":
             try_again.num1update = rd.randint(0,99)
             try_again.num2update = rd.randint(0,9)
             try_again.ans = try_again.num1update * try_again.num2update
 
-            newQ = Label(
+            newQ = customtkinter.CTkLabel(
                 root,
                 text=f"{try_again.num1update} * {try_again.num2update}",
-                font=("Courier", 16)
+                fg_color=("#262626"),
+                corner_radius=6,
+                text_font= ("Courier 16 bold")
             )
-            newQ.place(relx=0.16, rely=0.14, relwidth=0.7, relheight=0.23)
+            newQ.place(relx=0.5, rely=0.25, relwidth=0.7, relheight=0.23, anchor=customtkinter.CENTER)
 
         if try_again.op_rand == "/":
             try_again.num1update = rd.randint(0,99)
             try_again.num2update = rd.randint(1,9)
             try_again.ans = ("%.2f" % (try_again.num1update / try_again.num2update))
-            newQ = Label(
+            newQ = customtkinter.CTkLabel(
                 root,
                 text=f"{try_again.num1update} / {try_again.num2update}",
-                font=("Courier", 16)
+                fg_color=("#262626"),
+                corner_radius=6,
+                text_font= ("Courier 16 bold")
             )
-            newQ.place(relx=0.16, rely=0.14, relwidth=0.7, relheight=0.23)
+            newQ.place(relx=0.5, rely=0.25, relwidth=0.7, relheight=0.23, anchor=customtkinter.CENTER)
 
 
     def resultPLUS():
@@ -142,32 +177,49 @@ def easyStart():
     def delete():
         solving.delete(1)
 
-    easytext = Label(
-        root,
+    easytext = customtkinter.CTkLabel(
+        master=root,
         text = "EASY MODE",
-        font = ("Comic sans MS",16,"bold"),
-        background = "#ffffff")
-    easytext.pack(pady=(30,0))
+        text_font= ("Courier 16 bold"),
+        text_color='#79ae61')
+    easytext.pack(pady=(40,0))
 
-    start = Button(
-        root,
+    start = customtkinter.CTkButton(
+        master=root,
         text = "Start",
-        font = ("Courier", 16),
+        text_font= ("Courier 16 bold"),
         command = try_again)
-    start.place(relx=0.45, rely=0.2)
+    start.place(relx=0.5, rely=0.25, anchor=customtkinter.CENTER)
 
-    solving = Entry(
-        root,
+    solving = customtkinter.CTkEntry(
+        master=root,
         justify = "center",
-        font = ("Courier", 16))
-    solving.place(relx=0.35, rely=0.4, relwidth=0.34, relheight=0.23)
+        text_font="Courier 16")
+    solving.place(relx=0.5, rely=0.45, relwidth=0.34, relheight=0.13, anchor=customtkinter.CENTER)
 
-    submit = Button(
-        root,
+    submit = customtkinter.CTkButton(
+        master=root,
         text = "Submit",
-        font = ("Courier", 16),
+        text_font= ("Courier 16 bold"),
         command=lambda: submt(solving))
-    submit.place(relx=0.35, rely=0.64, relwidth=0.34, relheight=0.23)
+    submit.place(relx=0.5, rely=0.6, relwidth=0.24, relheight=0.13, anchor=customtkinter.CENTER)
+
+    btnBack = customtkinter.CTkButton(
+        master= root,
+        text= "Go Back",
+        text_font="Courier 10",
+        text_color="white",
+        hover= True,
+        hover_color= "black",
+        height=40,
+        width= 120,
+        border_width=2,
+        corner_radius=3,
+        border_color= "black", 
+        bg_color="#262626",
+        fg_color= "#262626",
+        command = goback)
+    btnBack.place(relx=0.5, rely=0.75,anchor=customtkinter.CENTER)
 
     # try_again = Button(
     #     root,
@@ -178,30 +230,43 @@ def easyStart():
     # try_again.place(relx=0.42, rely=0.9)
 
 def normalStart():
+    global try_again
+    def goback():
+        solving.delete(0,END)
+        newQ.destroy()
+        normaltext.destroy()
+        start.destroy()
+        solving.destroy()
+        submit.destroy()
+        btnBack.destroy()
+        menu()
 
     def submt(var1):
         if var1.get() == str(resultPLUS()):
-            correct = Label(
-                root,
+            correct = customtkinter.CTkLabel(
+                master=root,
                 text="Correct!",
-                fg="green",
-                font=("Courier", 16))
-            correct.place(relx=0.435, rely=0.17)
-            nm.score += 2
+                text_color="#79ae61",
+                fg_color=("#262626"),
+                text_font= ("Courier 16 bold"))
+            correct.place(relx=0.5, rely=0.17, anchor=customtkinter.CENTER)
+            ez.score += 1
             root.after(500, try_again)
         else:
-            wrong = Label(
+            wrong = customtkinter.CTkLabel(
                 root,
                 text="Wrong!!!",
-                fg="red",
-                font=("Courier", 16))
-            wrong.place(relx=0.435, rely=0.17)
-            wrong_score = Label(
+                text_color="#c75d55",
+                fg_color=("#262626"),
+                text_font= ("Courier 16 bold"))
+            wrong.place(relx=0.5, rely=0.17, anchor=customtkinter.CENTER)
+            wrong_score = customtkinter.CTkLabel(
                 root,
-                text=f"You got {nm.score}!",
-                fg="black",
-                font=("Courier", 16))
-            wrong_score.place(relx=0.413, rely=0.305)
+                text=f"You got {ez.score}!",
+                text_color="white",
+                fg_color=("#262626"),
+                text_font= ("Courier 16 bold"))
+            wrong_score.place(relx=0.5, rely=0.305, anchor=customtkinter.CENTER)
             if regis.reg == 1:
                 filter = {"username":regData.username}
                 high_scores = {'$set':{"highest_scores":nm.score}}
@@ -228,6 +293,7 @@ def normalStart():
 
 
     def try_again():
+        global newQ
         solving.delete(0,END)
         try_again.num1update = rd.randint(0,99999)
         try_again.num2update = rd.randint(0,99999)
@@ -237,58 +303,70 @@ def normalStart():
         if try_again.op_rand == "+":
             try_again.ans = try_again.num1update + try_again.num2update
 
-            newQ = Label(
+            newQ = customtkinter.CTkLabel(
                 root,
                 text=f"{try_again.num1update} + {try_again.num2update}",
-                font=("Courier", 16)
+                fg_color=("#262626"),
+                corner_radius=6,
+                text_font= ("Courier 16 bold")
             )
-            newQ.place(relx=0.16, rely=0.14, relwidth=0.7, relheight=0.23)
+            newQ.place(relx=0.5, rely=0.25, relwidth=0.7, relheight=0.23, anchor=customtkinter.CENTER)
 
         if try_again.op_rand == "-":
             try_again.num1update = rd.randint(0,9999)
             try_again.num2update = rd.randint(0,999)
             try_again.ans = try_again.num1update - try_again.num2update
 
-            newQ = Label(
+            newQ = customtkinter.CTkLabel(
                 root,
                 text=f"{try_again.num1update} - {try_again.num2update}",
-                font=("Courier", 16)
+                fg_color=("#262626"),
+                corner_radius=6,
+                text_font= ("Courier 16 bold")
             )
-            newQ.place(relx=0.16, rely=0.14, relwidth=0.7, relheight=0.23)
+            newQ.place(relx=0.5, rely=0.25, relwidth=0.7, relheight=0.23, anchor=customtkinter.CENTER)
 
         if try_again.op_rand == "*":
             try_again.num1update = rd.randint(0,99)
             try_again.num2update = rd.randint(0,9)
             try_again.ans = try_again.num1update * try_again.num2update
 
-            newQ = Label(
+            newQ = customtkinter.CTkLabel(
                 root,
                 text=f"{try_again.num1update} * {try_again.num2update}",
-                font=("Courier", 16)
+                fg_color=("#262626"),
+                corner_radius=6,
+                text_font= ("Courier 16 bold")
             )
-            newQ.place(relx=0.16, rely=0.14, relwidth=0.7, relheight=0.23)
+            newQ.place(relx=0.5, rely=0.25, relwidth=0.7, relheight=0.23, anchor=customtkinter.CENTER)
 
         if try_again.op_rand == "/":
             try_again.num1update = rd.randint(0,99)
             try_again.num2update = rd.randint(1,9)
             try_again.ans = ("%.2f" % (try_again.num1update / try_again.num2update))
-            newQ = Label(
+
+            newQ = customtkinter.CTkLabel(
                 root,
                 text=f"{try_again.num1update} / {try_again.num2update}",
-                font=("Courier", 16)
+                fg_color=("#262626"),
+                corner_radius=6,
+                text_font= ("Courier 16 bold")
             )
-            newQ.place(relx=0.16, rely=0.14, relwidth=0.7, relheight=0.23)
+            newQ.place(relx=0.5, rely=0.25, relwidth=0.7, relheight=0.23, anchor=customtkinter.CENTER)
 
         if try_again.op_rand == "^":
             try_again.num1update = rd.randint(0,99)
             try_again.num2update = rd.randint(0,3)
             try_again.ans = try_again.num1update ** try_again.num2update
-            newQ = Label(
+
+            newQ = customtkinter.CTkLabel(
                 root,
                 text=f"{try_again.num1update} ^ {try_again.num2update}",
-                font=("Courier", 16)
+                fg_color=("#262626"),
+                corner_radius=6,
+                text_font= ("Courier 16 bold")
             )
-            newQ.place(relx=0.16, rely=0.14, relwidth=0.7, relheight=0.23)
+            newQ.place(relx=0.5, rely=0.25, relwidth=0.7, relheight=0.23, anchor=customtkinter.CENTER)
 
 
     def resultPLUS():
@@ -298,32 +376,49 @@ def normalStart():
     def delete():
         solving.delete(1)
 
-    normaltext = Label(
-        root,
+    normaltext = customtkinter.CTkLabel(
+        master=root,
         text = "NORMAL MODE",
-        font = ("Comic sans MS",16,"bold"),
-        background = "#ffffff")
-    normaltext.pack(pady=(30,0))
+        text_font= ("Courier 16 bold"),
+        text_color='#eda850')
+    normaltext.pack(pady=(40,0))
 
-    start = Button(
-        root,
+    start = customtkinter.CTkButton(
+        master=root,
         text = "Start",
-        font = ("Courier", 16),
+        text_font= ("Courier 16 bold"),
         command = try_again)
-    start.place(relx=0.45, rely=0.2)
+    start.place(relx=0.5, rely=0.25, anchor=customtkinter.CENTER)
 
-    solving = Entry(
-        root,
+    solving = customtkinter.CTkEntry(
+        master=root,
         justify = "center",
-        font = ("Courier", 16))
-    solving.place(relx=0.35, rely=0.4, relwidth=0.34, relheight=0.23)
+        text_font="Courier 16")
+    solving.place(relx=0.5, rely=0.45, relwidth=0.34, relheight=0.13, anchor=customtkinter.CENTER)
 
-    submit = Button(
-        root,
+    submit = customtkinter.CTkButton(
+        master=root,
         text = "Submit",
-        font = ("Courier", 16),
+        text_font= ("Courier 16 bold"),
         command=lambda: submt(solving))
-    submit.place(relx=0.35, rely=0.64, relwidth=0.34, relheight=0.23)
+    submit.place(relx=0.5, rely=0.6, relwidth=0.24, relheight=0.13, anchor=customtkinter.CENTER)
+
+    btnBack = customtkinter.CTkButton(
+        master= root,
+        text= "Go Back",
+        text_font="Courier 10",
+        text_color="white",
+        hover= True,
+        hover_color= "black",
+        height=40,
+        width= 120,
+        border_width=2,
+        corner_radius=3,
+        border_color= "black", 
+        bg_color="#262626",
+        fg_color= "#262626",
+        command = goback)
+    btnBack.place(relx=0.5, rely=0.75,anchor=customtkinter.CENTER)
 
     # try_again = Button(
     #     root,
@@ -334,30 +429,42 @@ def normalStart():
 
 
 def hardStart():
+    def goback():
+        solving.delete(0,END)
+        newQ.destroy()
+        hardtext.destroy()
+        start.destroy()
+        solving.destroy()
+        submit.destroy()
+        btnBack.destroy()
+        menu()
 
     def submt(var1):
         if var1.get() == str(resultPLUS()):
-            correct = Label(
-                root,
+            correct = customtkinter.CTkLabel(
+                master=root,
                 text="Correct!",
-                fg="green",
-                font=("Courier", 16))
-            correct.place(relx=0.435, rely=0.17)
-            hd.score += 3
+                text_color="#79ae61",
+                fg_color=("#262626"),
+                text_font= ("Courier 16 bold"))
+            correct.place(relx=0.5, rely=0.17, anchor=customtkinter.CENTER)
+            ez.score += 1
             root.after(500, try_again)
         else:
-            wrong = Label(
+            wrong = customtkinter.CTkLabel(
                 root,
                 text="Wrong!!!",
-                fg="red",
-                font=("Courier", 16))
-            wrong.place(relx=0.435, rely=0.17)
-            wrong_score = Label(
+                text_color="#c75d55",
+                fg_color=("#262626"),
+                text_font= ("Courier 16 bold"))
+            wrong.place(relx=0.5, rely=0.17, anchor=customtkinter.CENTER)
+            wrong_score = customtkinter.CTkLabel(
                 root,
-                text=f"You got {hd.score}!",
-                fg="black",
-                font=("Courier", 16))
-            wrong_score.place(relx=0.413, rely=0.305)
+                text=f"You got {ez.score}!",
+                text_color="white",
+                fg_color=("#262626"),
+                text_font= ("Courier 16 bold"))
+            wrong_score.place(relx=0.5, rely=0.305, anchor=customtkinter.CENTER)
             if regis.reg == 1:
                 filter = {'username':regData.username}
                 high_scores = {'$set':{"highest_scores":hd.score}}
@@ -383,6 +490,7 @@ def hardStart():
 
 
     def try_again():
+        global newQ
         solving.delete(0,END)
         try_again.num1update = rd.randint(0,9999999)
         try_again.num2update = rd.randint(0,9999999)
@@ -392,69 +500,81 @@ def hardStart():
         if try_again.op_rand == "+":
             try_again.ans = try_again.num1update + try_again.num2update
 
-            newQ = Label(
+            newQ = customtkinter.CTkLabel(
                 root,
                 text=f"{try_again.num1update} + {try_again.num2update}",
-                font=("Courier", 16)
+                fg_color=("#262626"),
+                corner_radius=6,
+                text_font= ("Courier 16 bold")
             )
-            newQ.place(relx=0.16, rely=0.14, relwidth=0.7, relheight=0.23)
+            newQ.place(relx=0.5, rely=0.25, relwidth=0.7, relheight=0.23, anchor=customtkinter.CENTER)
 
         if try_again.op_rand == "-":
             try_again.num1update = rd.randint(0,999999)
             try_again.num2update = rd.randint(0,99999)
             try_again.ans = try_again.num1update - try_again.num2update
 
-            newQ = Label(
+            newQ = customtkinter.CTkLabel(
                 root,
                 text=f"{try_again.num1update} - {try_again.num2update}",
-                font=("Courier", 16)
+                fg_color=("#262626"),
+                corner_radius=6,
+                text_font= ("Courier 16 bold")
             )
-            newQ.place(relx=0.16, rely=0.14, relwidth=0.7, relheight=0.23)
+            newQ.place(relx=0.5, rely=0.25, relwidth=0.7, relheight=0.23, anchor=customtkinter.CENTER)
 
         if try_again.op_rand == "*":
             try_again.num1update = rd.randint(0,9999)
             try_again.num2update = rd.randint(0,999)
             try_again.ans = try_again.num1update * try_again.num2update
 
-            newQ = Label(
+            newQ = customtkinter.CTkLabel(
                 root,
                 text=f"{try_again.num1update} * {try_again.num2update}",
-                font=("Courier", 16)
+                fg_color=("#262626"),
+                corner_radius=6,
+                text_font= ("Courier 16 bold")
             )
-            newQ.place(relx=0.16, rely=0.14, relwidth=0.7, relheight=0.23)
+            newQ.place(relx=0.5, rely=0.25, relwidth=0.7, relheight=0.23, anchor=customtkinter.CENTER)
 
         if try_again.op_rand == "/":
             try_again.num1update = rd.randint(0,9999)
             try_again.num2update = rd.randint(1,999)
             try_again.ans = ("%.2f" % (try_again.num1update / try_again.num2update))
-            newQ = Label(
+
+            newQ = customtkinter.CTkLabel(
                 root,
                 text=f"{try_again.num1update} / {try_again.num2update}",
-                font=("Courier", 16)
+                fg_color=("#262626"),
+                corner_radius=6,
+                text_font= ("Courier 16 bold")
             )
-            newQ.place(relx=0.16, rely=0.14, relwidth=0.7, relheight=0.23)
-
+            newQ.place(relx=0.5, rely=0.25, relwidth=0.7, relheight=0.23, anchor=customtkinter.CENTER)
         if try_again.op_rand == "^":
             try_again.num1update = rd.randint(0,30)
             try_again.num2update = rd.randint(0,9)
             try_again.ans = try_again.num1update ** try_again.num2update
-            newQ = Label(
+
+            newQ = customtkinter.CTkLabel(
                 root,
                 text=f"{try_again.num1update} ^ {try_again.num2update}",
-                font=("Courier", 16)
+                fg_color=("#262626"),
+                corner_radius=6,
+                text_font= ("Courier 16 bold")
             )
-            newQ.place(relx=0.16, rely=0.14, relwidth=0.7, relheight=0.23)
+            newQ.place(relx=0.5, rely=0.25, relwidth=0.7, relheight=0.23, anchor=customtkinter.CENTER)
 
         if try_again.op_rand == "sqrt":
             try_again.num1update = rd.randint(1,999)
             try_again.ans = ("%.2f" % (m.sqrt(try_again.num1update)))
-            newQ = Label(
+            newQ = customtkinter.CTkLabel(
                 root,
                 text=f"√{try_again.num1update}",
-                font=("Courier", 16)
+                fg_color=("#262626"),
+                corner_radius=6,
+                text_font= ("Courier 16 bold")
             )
-            newQ.place(relx=0.16, rely=0.14, relwidth=0.7, relheight=0.23)
-
+            newQ.place(relx=0.5, rely=0.25, relwidth=0.7, relheight=0.23, anchor=customtkinter.CENTER)
 
     def resultPLUS():
         try_again
@@ -463,32 +583,49 @@ def hardStart():
     def delete():
         solving.delete(1)
 
-    hardtext = Label(
-        root,
+    hardtext = customtkinter.CTkLabel(
+        master=root,
         text = "HARD MODE",
-        font = ("Comic sans MS",16,"bold"),
-        background = "#ffffff")
-    hardtext.pack(pady=(30,0))
+        text_font= ("Courier 16 bold"),
+        text_color='#c75d55')
+    hardtext.pack(pady=(40,0))
 
-    start = Button(
-        root,
+    start = customtkinter.CTkButton(
+        master=root,
         text = "Start",
-        font = ("Courier", 16),
+        text_font= ("Courier 16 bold"),
         command = try_again)
-    start.place(relx=0.45, rely=0.2)
+    start.place(relx=0.5, rely=0.25, anchor=customtkinter.CENTER)
 
-    solving = Entry(
-        root,
+    solving = customtkinter.CTkEntry(
+        master=root,
         justify = "center",
-        font = ("Courier", 16))
-    solving.place(relx=0.35, rely=0.4, relwidth=0.34, relheight=0.23)
+        text_font="Courier 16")
+    solving.place(relx=0.5, rely=0.45, relwidth=0.34, relheight=0.13, anchor=customtkinter.CENTER)
 
-    submit = Button(
-        root,
+    submit = customtkinter.CTkButton(
+        master=root,
         text = "Submit",
-        font = ("Courier", 16),
+        text_font= ("Courier 16 bold"),
         command=lambda: submt(solving))
-    submit.place(relx=0.35, rely=0.64, relwidth=0.34, relheight=0.23)
+    submit.place(relx=0.5, rely=0.6, relwidth=0.24, relheight=0.13, anchor=customtkinter.CENTER)
+
+    btnBack = customtkinter.CTkButton(
+        master= root,
+        text= "Go Back",
+        text_font="Courier 10",
+        text_color="white",
+        hover= True,
+        hover_color= "black",
+        height=40,
+        width= 120,
+        border_width=2,
+        corner_radius=3,
+        border_color= "black", 
+        bg_color="#262626",
+        fg_color= "#262626",
+        command = goback)
+    btnBack.place(relx=0.5, rely=0.75,anchor=customtkinter.CENTER)
 '''
     try_again = Button(
         root,
@@ -498,10 +635,95 @@ def hardStart():
     try_again.place(relx=0.42, rely=0.9)
 '''
 
-root = tkinter.Tk()
+def leaderStart():
+
+    def goback():
+        leadtext.destroy()
+        leaderboard.destroy()
+        userb.destroy()
+        scoreb.destroy()
+        btnBack.destroy()
+        menu()
+
+    with open('env.json') as d:
+        dictData = json.load(d)
+        cluster = MongoClient(dictData["dbURL"])
+
+    db = cluster["test"]
+    collection = db["test"]
+
+    res = collection.find().sort("highest_scores", -1).limit(7)
+
+    rank = 0
+    lst = []
+
+    for i in res:
+        u = i["username"]
+        s = i["highest_scores"]
+        rank += 1
+        tab = "\t\t"
+        lst.append(f"{rank}. name: {u}{tab}Scores: {s}")
+
+    print(lst)
+
+    leadtext = customtkinter.CTkLabel(
+        root,
+        text = "LEADERBOARD",
+        text_font= ("Courier 30 bold"),
+        text_color='#eda850'
+    )
+    leadtext.pack(pady=(60,30))
+
+    leaderboard = customtkinter.CTkLabel(
+        root,
+        text=("\n".join(lst)),
+        text_font= ("Courier 16"),
+        text_color='#eda850',
+        fg_color=("#262626"),
+        corner_radius=6,
+        justify=tkinter.LEFT)
+    leaderboard.place(relx=0.5, rely=0.5, relwidth=1, relheight=0.5, anchor=customtkinter.CENTER)
+
+    userb = customtkinter.CTkLabel(
+        root,
+        text=("User"),
+        text_font= ("Courier 20 bold"),
+        text_color='white',
+        fg_color=("#262626"),
+        corner_radius=6)
+    userb.place(relx=0.2, rely=0.28)
+
+    scoreb = customtkinter.CTkLabel(
+        root,
+        text=("Score"),
+        text_font= ("Courier 20 bold"),
+        text_color='white',
+        fg_color=("#262626"),
+        corner_radius=6)
+    scoreb.place(relx=0.6, rely=0.28)
+
+    btnBack = customtkinter.CTkButton(
+        master= root,
+        text= "Go Back",
+        text_font="Courier 10",
+        text_color="white",
+        hover= True,
+        hover_color= "black",
+        height=40,
+        width= 120,
+        border_width=2,
+        corner_radius=3,
+        border_color= "black", 
+        bg_color="#262626",
+        fg_color= "#262626",
+        command = goback)
+    btnBack.place(relx=0.5, rely=0.7,anchor=customtkinter.CENTER)
+
+
+
+root = customtkinter.CTk()
 root.title("Super Quiz")
 root.geometry("700x600")
-root.config(background="#ffffff")
 root.resizable(0,0)
 
 def menu():
@@ -512,6 +734,9 @@ def menu():
         btnStartNormal.destroy()
         btnStartHard.destroy()
         lblInstruction.destroy()
+        btnStartLeader.destroy()
+        btnLogout.destroy()
+        lblrule.destroy()
         easyStart()
 
     def normalIspressed():
@@ -520,6 +745,9 @@ def menu():
         btnStartNormal.destroy()
         btnStartHard.destroy()
         lblInstruction.destroy()
+        btnStartLeader.destroy()
+        btnLogout.destroy()
+        lblrule.destroy()
         normalStart()
 
     def hardIspressed():
@@ -528,67 +756,145 @@ def menu():
         btnStartNormal.destroy()
         btnStartHard.destroy()
         lblInstruction.destroy()
+        btnStartLeader.destroy()
+        btnLogout.destroy()
+        lblrule.destroy()
         hardStart()
 
-    labeltext = Label(
+    def leaderIspressed():
+        labeltext.destroy()
+        btnStartEasy.destroy()
+        btnStartNormal.destroy()
+        btnStartHard.destroy()
+        lblInstruction.destroy()
+        btnStartLeader.destroy()
+        btnLogout.destroy()
+        lblrule.destroy()
+        leaderStart()
+
+    def logoutIspressed():
+        labeltext.destroy()
+        btnStartEasy.destroy()
+        btnStartNormal.destroy()
+        btnStartHard.destroy()
+        lblInstruction.destroy()
+        btnStartLeader.destroy()
+        btnLogout.destroy()
+        lblrule.destroy()
+        loginmenu()
+
+    labeltext = customtkinter.CTkLabel(
         root,
         text = "Super Math Quiz",
-        font = ("Comic sans MS",24,"bold"),
-        background = "#ffffff"
+        text_font= ("Courier 30 bold"),
+        text_color='#738ADB'
     )
-    labeltext.pack(pady=(30,10))
+    labeltext.pack(pady=(50,30))
 
-    easy = PhotoImage(file="easy.png")
 
-    btnStartEasy = Button(
-        root,
-        image = easy,
-        relief = FLAT,
-        border = 0,
-        command = easyIspressed,
-        background = "#ffffff"
-    )
+    btnStartEasy = customtkinter.CTkButton(
+        master= root,
+        text= "EASY ★",
+        text_font="none 10",
+        text_color="white",
+        hover= True,
+        hover_color= "#79ae61",
+        height=40,
+        width= 120,
+        border_width=2,
+        corner_radius=3,
+        border_color= "#79ae61", 
+        bg_color="#262626",
+        fg_color= "#262626",
+        command = easyIspressed)
+
     btnStartEasy.pack(pady=(10,0))
 
-    normal = PhotoImage(file="normal.png")
-
-    btnStartNormal = Button(
-        root,
-        image = normal,
-        relief = FLAT,
-        border = 0,
-        command = normalIspressed,
-        background = "#ffffff"
-    )
+    btnStartNormal = customtkinter.CTkButton(
+        master= root,
+        text= "NORMAL ★★",
+        text_font="none 10",
+        text_color="white",
+        hover= True,
+        hover_color= "#eda850",
+        height=40,
+        width= 120,
+        border_width=2,
+        corner_radius=3,
+        border_color= "#eda850", 
+        bg_color="#262626",
+        fg_color= "#262626",
+        command = normalIspressed)
     btnStartNormal.pack(pady=(10,0))
 
-    hard = PhotoImage(file="hard.png")
+    btnStartHard = customtkinter.CTkButton(
+        master= root,
+        text= "HARD ★★★",
+        text_font="none 10",
+        text_color="white",
+        hover= True,
+        hover_color= "#c75d55",
+        height=40,
+        width= 120,
+        border_width=2,
+        corner_radius=3,
+        border_color= "#c75d55", 
+        bg_color="#262626",
+        fg_color= "#262626",
+        command = hardIspressed)
 
-    btnStartHard = Button(
-        root,
-        image = hard,
-        relief = FLAT,
-        border = 0,
-        command = hardIspressed,
-        background = "#ffffff"
-    )
-    btnStartHard.pack(pady=(10,20))
+    btnStartHard.pack(pady=(10,0))
 
-    lblInstruction = Label(
+    btnStartLeader = customtkinter.CTkButton(
+        master= root,
+        text= "LEADERBOARD",
+        text_font="none 10",
+        text_color="white",
+        hover= True,
+        hover_color= "black",
+        height=40,
+        width= 120,
+        border_width=2,
+        corner_radius=3,
+        border_color= "black", 
+        bg_color="#262626",
+        fg_color= "#262626",
+        command = leaderIspressed)
+    btnStartLeader.pack(pady=(10,50))
+
+    lblInstruction = customtkinter.CTkLabel(
         root,
         text = "Math Quiz is a great way to check your math skills! \n Children pick from four math quizzes: Addition, Subtraction, Multiplication & Division.",
-        font = ("Consolas",8),
-        justify = "center",
-        background = "#ffffff"
+        text_font="Consolas 8"
     )
-    lblInstruction.pack()
+    lblInstruction.pack(pady=(10,10))
+
+    lblrule = customtkinter.CTkLabel(
+        root,
+        text = "WARNING! in every divisions questions, you need to answer with 2 decimals",
+        text_color="#c75d55",
+        text_font="Consolas 8"
+    )
+    lblrule.pack(pady=(2,10))
+
+    btnLogout = customtkinter.CTkButton(
+        master= root,
+        text= "LOGOUT",
+        text_font="none 10",
+        text_color="white",
+        hover= True,
+        hover_color= "#c75d55",
+        height=40,
+        width= 120,
+        border_width=2,
+        corner_radius=3,
+        border_color= "#c75d55", 
+        bg_color="#262626",
+        fg_color= "#262626",
+        command = logoutIspressed)
+    btnLogout.pack(pady=(10,50))
 
 def loginIspressed():
-    class check_valid:
-            def __init__(self, Err, err):
-                self.Err = Err
-                self.err = err
-    myErr = check_valid(0,0)
     def logindestroy():
         global logData, username, password, log_pass
         username = logEnUsername.get()
@@ -601,42 +907,18 @@ def loginIspressed():
             if collection.find_one({"username":username}):
                 
                 if res["password"] != password or res["username"] != username:
-                    err = Label(
-                        root,
-                        text = "Username or Password is invalid.",
-                        fg="red",
-                        font = ("Courier", 16),
-                        background = "#ffffff"
-                    )
-                    err.place(relx=0.21, rely=0.5)
+                    messagebox.showerror(title="Error", message="Password is not match or Username is invalid.")
                     logEnUsername.delete(0, END)
                     logEnPassword.delete(0, END)
-                    myErr.err = 1
-                    if myErr.Err == 1:
-                        Err.destroy()
                 else:
                     log_pass = True
                     return log_pass
             else:
-                Err = Label(
-                    root,
-                    text = "Please enter your Username and Password.",
-                    fg="red",
-                    font = ("Courier", 16),
-                    background = "#ffffff"
-                )
-                Err.place(relx=0.13, rely=0.5)
+                messagebox.showerror(title="Error", message="Please enter your Username or Password.")
                 logEnUsername.delete(0, END)
                 logEnPassword.delete(0, END)
-                myErr.Err = 1
-                if myErr.err == 1:
-                    err.destroy()
         
         if checklog_secure() == True:
-            if myErr.err == 1:
-                err.destroy()
-            if myErr.Err == 1:
-                Err.destroy()
             logusername.destroy()
             logEnUsername.destroy()
             logpassword.destroy()
@@ -644,199 +926,93 @@ def loginIspressed():
             btnGoLogin.destroy()
             # messagebox.showinfo(title="Success", message="Loggedin Success!")
             menu()
-        
+
     btnLogin.destroy()
     btnRegister.destroy()
-    logusername = Label(
+    newQ.destroy()
+    correct.destroy()
+    wrong.destroy()
+    wrong_score.destroy()
+    logusername = customtkinter.CTkLabel(
         root,
-        text = "USERNAME:",
-        font = ("Courier", 16),
-        background = "#ffffff"
+        text_font="Courier 12",
+        text = "USERNAME :",
     )
     logusername.place(relx=0.2, rely=0.3)
     global logEnUsername, logEnPassword
-    logEnUsername = Entry(
-        root,
-        font = ("Courier", 16))
+    logEnUsername = customtkinter.CTkEntry(
+        root)
     logEnUsername.place(relx=0.38, rely=0.3, relwidth=0.34, relheight=0.05)
 
-    logpassword = Label(
+    logpassword = customtkinter.CTkLabel(
         root,
-        text = "PASSWORD:",
-        font = ("Courier", 16),
-        background = "#ffffff"
+        text_font="Courier 12",
+        text = "PASSWORD :",
     )
     logpassword.place(relx=0.2, rely=0.37)
 
-    logEnPassword = Entry(
+    logEnPassword = customtkinter.CTkEntry(
         root,
-        font = ("Courier", 16),
-        show = '*'
+        show = '*',
+        text_font="Courier 12",
         )
 
     logEnPassword.place(relx=0.38, rely=0.37, relwidth=0.34, relheight=0.05)
 
-    btnGoLogin = Button(
+    btnGoLogin = customtkinter.CTkButton(
         root,
         text = "LOGIN",
-        font = ("Courier", 16),
+        text_font="Courier 12 bold",
         command = logindestroy,
-        background = "#ffffff",
     )
-    btnGoLogin.place(relx=0.42, rely=0.6)
+    btnGoLogin.place(relx=0.5, rely=0.6, anchor=customtkinter.CENTER)
 
 def registerIspressed():
-    class check_shit:
-        def __init__(self, lenErr, numErr, lowCharErr, upperCharErr, invalidErr, noDataErr, usedErr):
-            self.lenErr = lenErr
-            self.numErr = numErr
-            self.lowCharErr = lowCharErr
-            self.upperCharErr = upperCharErr
-            self.invalidErr = invalidErr,
-            self.noDataErr = noDataErr,
-            self.usedErr = usedErr
-    my_shit = check_shit(0,0,0,0,0,0,0)
     def check_secure():
-        global lenerr, Numerr, low_char_err, upper_charerr
         password = RegEnPassword.get()
         secure_pass = True
         lower_case = any([1 if c in string.ascii_lowercase else 0 for c in password])
         upper_case = any([1 if c in string.ascii_uppercase else 0 for c in password])
         number = any([1 if c in string.digits else 0 for c in password])        
         if len(password) < 6:
-            lenerr = Label(
-                root,
-                text = "Password must be 6 charactors long.",
-                fg="red",
-                font = ("Courier", 16),
-                background = "#ffffff"
-            )
-            lenerr.place(relx=0.190, rely=0.5)
-            my_shit.lenErr = 1
-            if my_shit.upperCharErr == 1:
-                upper_charerr.destroy()
-            if my_shit.lowCharErr == 1:
-                low_char_err.destroy()
-            if my_shit.numErr == 1:
-                Numerr.destroy()
+            messagebox.showerror(title="Error", message="Password must be at least 6 characters long.")
             secure_pass = False
             return secure_pass
         
         if number == False:
-            Numerr = Label(
-                root,
-                text = "Password must be contain at least 1 number.",
-                fg="red",
-                font = ("Courier", 16),
-                background = "#ffffff"
-            )
-            Numerr.place(relx=0.099, rely=0.5)
-            my_shit.numErr = 1
-            if my_shit.upperCharErr == 1:
-                upper_charerr.destroy()
-            if my_shit.lowCharErr == 1:
-                low_char_err.destroy()
-            if my_shit.lenErr == 1:
-                lenerr.destroy()
+            messagebox.showerror(title="Error", message="Password must be contain at least 1 number.")
             secure_pass = False
             return secure_pass
 
         if lower_case == False:
-            low_char_err = Label(
-                root,
-                text = "Password must be contain at least 1 character.",
-                fg="red",
-                font = ("Courier", 16),
-                background = "#ffffff"
-            )
-            low_char_err.place(relx=0.07, rely=0.5)
-            my_shit.lowCharErr = 1
-            if my_shit.upperCharErr == 1:
-                upper_charerr.destroy()
-            if my_shit.numErr == 1:
-                Numerr.destroy()
-            if my_shit.lenErr == 1:
-                lenerr.destroy()
+            messagebox.showerror(title="Error", message="Password must be contain at least 1 character.")
             secure_pass = False
             return secure_pass
         
         if upper_case == False:
-            upper_charerr = Label(
-            root,
-            text = "Password must be contain at least 1 upper character.",
-            fg="red",
-            font = ("Courier", 16),
-            background = "#ffffff"
-            )
-            upper_charerr.place(relx=0.018, rely=0.5)
-            my_shit.upperCharErr = 1
-            if my_shit.lowCharErr == 1:
-                low_char_err.destroy()
-            if my_shit.numErr == 1:
-                Numerr.destroy()
-            if my_shit.lenErr == 1:
-                lenerr.destroy()
+            messagebox.showerror(title="Error", message="Password must be contain at least 1 upper character.")
             secure_pass = False
             return secure_pass
-        
-        if my_shit.upperCharErr == 1:
-                upper_charerr.destroy()
-        if my_shit.lowCharErr == 1:
-                low_char_err.destroy()           
-        if my_shit.lenErr == 1:
-                lenerr.destroy()
-        if my_shit.numErr == 1:
-                Numerr.destroy()
         secure_pass = True
         return secure_pass
-    
     def registerdestroy():
-        global regData, invalidUser, err3, err
+        global regData
         regData = user_pass(RegEnUsername.get(), RegEnPassword.get())
         if regData.username != "" or regData.password != "":
             if collection.find_one({"username":regData.username}):
-                err = Label(
-                    root,
-                    text = "Username is already exist.",
-                    fg="red",
-                    font = ("Courier", 16),
-                    background = "#ffffff"
-                )
-                err.place(relx=0.263, rely=0.5)
-                my_shit.usedErr = 1
-                if my_shit.noDataErr == 1:
-                    err3.destroy()
-                if my_shit.invalidErr == 1:
-                    invalidUser.destroy()
+                messagebox.showerror(title="Error", message="Username is already exist.")
                 RegEnUsername.delete(0, END)
                 RegEnPassword.delete(0, END)
             else:
                 if regData.username == "" and regData != "":
-                    invalidUser = Label(
-                        root,
-                        text = "Username is invalid.",
-                        fg="red",
-                        font = ("Courier", 16),
-                        background = "#ffffff"
-                    )
-                    invalidUser.place(relx=0.320, rely=0.5)
-                    my_shit.invalidErr = 1
-                    if my_shit.noDataErr == 1:
-                        err3.destroy()
-                    if my_shit.usedErr == 1:
-                        err.destroy()
+                    messagebox.showerror(title="Error", message="Username is invalid.")
                 i = 0
                 result = collection.find({})
                 for x in result:
                     i = i+1
                 if check_secure() == True:
                     if regData.username == "" and regData != "":
-                        invalidUser.place(relx=0.320, rely=0.5)
-                        my_shit.invalidErr = 1
-                        if my_shit.noDataErr == 1:
-                            err3.destroy()
-                        if my_shit.usedErr == 1:
-                            err.destroy()
+                        messagebox.showerror(title="Error", message="Username is invalid.")
                     else:
                         regis.reg = 1
                         collection.insert_one({"_id":i,"username":regData.username,"password":regData.password, "highest_scores":0, "lastest_scores":0})
@@ -845,84 +1021,103 @@ def registerIspressed():
                         regpassword.destroy()
                         RegEnPassword.destroy()
                         btnGoReg.destroy()
-                        if my_shit.noDataErr == 1:
-                            err3.destroy()
-                        if my_shit.usedErr == 1:
-                            err.destroy()
-                        if my_shit.invalidErr == 1:
-                            invalidUser.destroy()
                         messagebox.showinfo(title="Success", message="Registered success!")
                         menu()
         else:
-            err3 = Label(
-                root,
-                text = "Please enter all of entry.",
-                fg="red",
-                font = ("Courier", 16),
-                background = "#ffffff"
-            )
-            err3.place(relx=0.263, rely=0.5)
-            my_shit.noDataErr = 1
-            if my_shit.usedErr == 1:
-                err.destroy()
-            if my_shit.invalidErr == 1:
-                invalidUser.destroy()
+            messagebox.showerror(title="Error", message="Please enter all of entry")
 
     
     btnLogin.destroy()
     btnRegister.destroy()
-    logusername = Label(
+    newQ.destroy()
+    correct.destroy()
+    wrong.destroy()
+    wrong_score.destroy()
+    logusername = customtkinter.CTkLabel(
         root,
-        text = "USERNAME:",
-        font = ("Courier", 16),
-        background = "#ffffff"
+        text_font="Courier 12",
+        text = "USERNAME :",
     )
     logusername.place(relx=0.2, rely=0.3)
     global RegEnUsername, RegEnPassword
-    RegEnUsername = Entry(
+    RegEnUsername = customtkinter.CTkEntry(
         root,
-        font = ("Courier", 16))
+        text_font="Courier 12")
     RegEnUsername.place(relx=0.38, rely=0.3, relwidth=0.34, relheight=0.05)
 
-    regpassword = Label(
+    regpassword = customtkinter.CTkLabel(
         root,
-        text = "PASSWORD:",
-        font = ("Courier", 16),
-        background = "#ffffff"
+        text_font="Courier 12",
+        text = "PASSWORD :",
     )
     regpassword.place(relx=0.2, rely=0.37)
-    RegEnPassword = Entry(
+
+    RegEnPassword = customtkinter.CTkEntry(
         root,
-        font = ("Courier", 16),
-        show = '*'
+        show = '*',
+        text_font="Courier 12",
         )
     RegEnPassword.place(relx=0.38, rely=0.37, relwidth=0.34, relheight=0.05)
 
-    btnGoReg = Button(
+
+    btnGoReg = customtkinter.CTkButton(
         root,
         text = "REGISTER",
-        font = ("Courier", 16),
+        text_font="Courier 12 bold",
         command = registerdestroy,
-        background = "#ffffff",
     )
-    btnGoReg.place(relx=0.42, rely=0.6)
+    btnGoReg.place(relx=0.5, rely=0.6, anchor=customtkinter.CENTER)
 
-btnLogin = Button(
-    root,
-    text = "LOGIN",
-    font = ("Courier", 16),
-    command = loginIspressed,
-    background = "#ffffff"
-)
-btnLogin.place(relx=0.35, rely=0.15)
+def loginmenu():
+    global btnLogin, btnRegister, newQ, correct, wrong, wrong_score
+    btnLogin = customtkinter.CTkButton(
+        master=root,
+        text = "LOGIN",
+        text_font="Courier 12 bold",
+        command = loginIspressed,
+    )
+    btnLogin.place(relx=0.35, rely=0.15, relwidth=0.12, relheight=0.05)
 
-btnRegister = Button(
-    root,
-    text = "REGISTER",
-    font = ("Courier", 16),
-    command = registerIspressed,
-    background = "#ffffff"
-)
-btnRegister.place(relx=0.48, rely=0.15)
+    btnRegister = customtkinter.CTkButton(
+        master=root,
+        text = "REGISTER",
+        text_font="Courier 12 bold",
+        command = registerIspressed,
+    )
+    btnRegister.place(relx=0.48, rely=0.15, relwidth=0.14, relheight=0.05)
 
+    newQ = customtkinter.CTkLabel(
+        root,
+        text=f"Super Quiz V6.9", 
+        fg_color=("#262626"),
+        corner_radius=6,
+        text_font= ("Courier 16 bold")
+    )
+    newQ.place(relx=0.5, rely=0.5, relwidth=0.7, relheight=0.23, anchor=customtkinter.CENTER)
+
+    correct = customtkinter.CTkLabel(
+        master=root,
+        text="",
+        text_color="#79ae61",
+        fg_color=("#262626"),
+        text_font= ("Courier 16 bold"))
+    correct.place(relx=0.5, rely=0.55, relwidth=0.1, relheight=0.05, anchor=customtkinter.CENTER)
+
+    wrong = customtkinter.CTkLabel(
+        master=root,
+        text="",
+        text_color="#79ae61",
+        fg_color=("#262626"),
+        text_font= ("Courier 16 bold"))
+    wrong.place(relx=0.5, rely=0.55, relwidth=0.1, relheight=0.05, anchor=customtkinter.CENTER)
+
+    wrong_score = customtkinter.CTkLabel(
+        master=root,
+        text="",
+        text_color="#79ae61",
+        fg_color=("#262626"),
+        text_font= ("Courier 16 bold"))
+    wrong_score.place(relx=0.5, rely=0.55, relwidth=0.1, relheight=0.05, anchor=customtkinter.CENTER)
+
+loginmenu()
 root.mainloop()
