@@ -298,6 +298,7 @@ def normalStart():
 
     def try_again():
         global newQ
+        newQ.destroy()
         solving.delete(0,END)
         try_again.num1update = rd.randint(0,99999)
         try_again.num2update = rd.randint(0,99999)
@@ -499,6 +500,7 @@ def hardStart():
 
     def try_again():
         global newQ
+        newQ.destroy()
         solving.delete(0,END)
         try_again.num1update = rd.randint(0,9999999)
         try_again.num2update = rd.randint(0,9999999)
