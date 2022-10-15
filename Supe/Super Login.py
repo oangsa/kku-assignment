@@ -233,6 +233,9 @@ def normalStart():
     global try_again
     def goback():
         solving.delete(0,END)
+        correct.destroy()
+        wrong.destroy()
+        wrong_score.destroy()
         newQ.destroy()
         normaltext.destroy()
         start.destroy()
@@ -242,6 +245,7 @@ def normalStart():
         menu()
 
     def submt(var1):
+        global correct, wrong, wrong_score
         if var1.get() == str(resultPLUS()):
             correct = customtkinter.CTkLabel(
                 master=root,
@@ -431,6 +435,9 @@ def normalStart():
 def hardStart():
     def goback():
         solving.delete(0,END)
+        correct.destroy()
+        wrong.destroy()
+        wrong_score.destroy()
         newQ.destroy()
         hardtext.destroy()
         start.destroy()
@@ -440,6 +447,7 @@ def hardStart():
         menu()
 
     def submt(var1):
+        global correct, wrong, wrong_score
         if var1.get() == str(resultPLUS()):
             correct = customtkinter.CTkLabel(
                 master=root,
