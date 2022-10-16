@@ -113,7 +113,7 @@ def easyStart():
                 else:
                     pass
                 collection.update_one(filter, current_scores)
-                root.after(3000, destroy)
+                root.after(3000, goback)
             else:
                 filter = {"username":logData.username}
                 high_scores = {'$set':{"highest_scores":ez.score}}
@@ -124,7 +124,7 @@ def easyStart():
                 else:
                     pass
                 collection.update_one(filter, current_scores)
-                root.after(3000, destroy)
+                root.after(3000, goback)
     
     def try_again():
         global newQ
@@ -251,6 +251,26 @@ def easyStart():
 def normalStart():
     global try_again
     def goback():
+        if regis.reg == 1:
+            filter = {"username":regData.username.lower()}
+            high_scores = {'$set':{"highest_scores":nm.score}}
+            current_scores = {'$set':{"lastest_scores":nm.score}}
+            res = collection.find_one({"username":regData.username.lower()})
+            if nm.score > res["highest_scores"]:
+                collection.update_one(filter, high_scores)
+            else:
+                pass
+            collection.update_one(filter, current_scores)
+        else:
+            filter = {"username":logData.username}
+            high_scores = {'$set':{"highest_scores":nm.score}}
+            current_scores = {'$set':{"lastest_scores":nm.score}}
+            res = collection.find_one({"username":logData.username})
+            if nm.score > res["highest_scores"]:
+                collection.update_one(filter, high_scores)
+            else:
+                pass
+            collection.update_one(filter, current_scores)
         solving.delete(0,END)
         correct.destroy()
         wrong.destroy()
@@ -273,7 +293,7 @@ def normalStart():
                 fg_color=("#262626"),
                 text_font= ("Courier 16 bold"))
             correct.place(relx=0.5, rely=0.17, anchor=customtkinter.CENTER)
-            ez.score += 1
+            nm.score += 2
             root.after(500, try_again)
         else:
             wrong = customtkinter.CTkLabel(
@@ -285,7 +305,7 @@ def normalStart():
             wrong.place(relx=0.5, rely=0.17, anchor=customtkinter.CENTER)
             wrong_score = customtkinter.CTkLabel(
                 root,
-                text=f"You got {ez.score}!",
+                text=f"You got {nm.score}!",
                 text_color="white",
                 fg_color=("#262626"),
                 text_font= ("Courier 16 bold"))
@@ -300,7 +320,7 @@ def normalStart():
                 else:
                     pass
                 collection.update_one(filter, current_scores)
-                root.after(3000, destroy)
+                root.after(3000, goback)
             else:
                 filter = {"username":logData.username}
                 high_scores = {'$set':{"highest_scores":nm.score}}
@@ -311,7 +331,7 @@ def normalStart():
                 else:
                     pass
                 collection.update_one(filter, current_scores)
-                root.after(3000, destroy)
+                root.after(3000, goback)
             
 
 
@@ -453,7 +473,28 @@ def normalStart():
 
 
 def hardStart():
+    global try_again
     def goback():
+        if regis.reg == 1:
+            filter = {"username":regData.username.lower()}
+            high_scores = {'$set':{"highest_scores":hd.score}}
+            current_scores = {'$set':{"lastest_scores":hd.score}}
+            res = collection.find_one({"username":regData.username.lower()})
+            if hd.score > res["highest_scores"]:
+                collection.update_one(filter, high_scores)
+            else:
+                pass
+            collection.update_one(filter, current_scores)
+        else:
+            filter = {"username":logData.username}
+            high_scores = {'$set':{"highest_scores":hd.score}}
+            current_scores = {'$set':{"lastest_scores":hd.score}}
+            res = collection.find_one({"username":logData.username})
+            if hd.score > res["highest_scores"]:
+                collection.update_one(filter, high_scores)
+            else:
+                pass
+            collection.update_one(filter, current_scores)
         solving.delete(0,END)
         correct.destroy()
         wrong.destroy()
@@ -476,7 +517,7 @@ def hardStart():
                 fg_color=("#262626"),
                 text_font= ("Courier 16 bold"))
             correct.place(relx=0.5, rely=0.17, anchor=customtkinter.CENTER)
-            ez.score += 1
+            hd.score += 3
             root.after(500, try_again)
         else:
             wrong = customtkinter.CTkLabel(
@@ -488,7 +529,7 @@ def hardStart():
             wrong.place(relx=0.5, rely=0.17, anchor=customtkinter.CENTER)
             wrong_score = customtkinter.CTkLabel(
                 root,
-                text=f"You got {ez.score}!",
+                text=f"You got {hd.score}!",
                 text_color="white",
                 fg_color=("#262626"),
                 text_font= ("Courier 16 bold"))
@@ -503,7 +544,7 @@ def hardStart():
                 else:
                     pass
                 collection.update_one(filter, current_scores)
-                root.after(3000, destroy)
+                root.after(3000, goback)
             else:
                 filter = {"username":logData.username}
                 high_scores = {'$set':{"highest_scores":hd.score}}
@@ -514,7 +555,7 @@ def hardStart():
                 else:
                     pass
                 collection.update_one(filter, current_scores)
-                root.after(3000, destroy)
+                root.after(3000, goback)
 
 
     def try_again():
@@ -672,6 +713,7 @@ def leaderStart():
         userb.destroy()
         scoreb.destroy()
         btnBack.destroy()
+        score.destroy()
         menu()
     
 
@@ -713,13 +755,13 @@ def leaderStart():
     
     score = customtkinter.CTkLabel(
         root,
-        text=(f"Your Current Scores: {cs}, Your Highest Scores: {hs}"),
-        text_font= ("Courier 16"),
-        text_color='#eda850',
-        fg_color=("#262626"),
+        text=(f"Your Current Scores: {cs}{tab} Your Highest Scores: {hs}"),
+        text_font= ("Courier 10 bold"),
+        text_color='#262626',
+        fg_color=("#eda850"),
         corner_radius=6,
         justify=tkinter.LEFT)
-    score.place(relx=0.5, rely=0.9, relwidth=1, relheight=0.5, anchor=customtkinter.CENTER)
+    score.place(relx=0.5, rely=0.9, relwidth=1, relheight=0.2, anchor=customtkinter.CENTER)
 
     userb = customtkinter.CTkLabel(
         root,
