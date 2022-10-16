@@ -12,7 +12,7 @@ from tkinter import *
 from tkinter import messagebox
 
 customtkinter.set_appearance_mode("default")  # Modes: system (default), light, dark
-customtkinter.set_default_color_theme("blue")  # Themes: blue (default), dark-blue, green
+customtkinter.set_default_color_theme("green")  # Themes: blue (default), dark-blue, green
 
 with open('env.json') as d:
     dictData = json.load(d)
@@ -75,13 +75,14 @@ def easyStart():
         submit.destroy()
         btnBack.destroy()
         menu()
+        ez.score = 0
 
     def submt(var1):
         global correct, wrong, wrong_score
         if var1.get() == str(resultPLUS()):
             correct = customtkinter.CTkLabel(
                 master=root,
-                text="Correct!",
+                text="Correct! +1",
                 text_color="#79ae61",
                 fg_color=("#262626"),
                 text_font= ("Courier 16 bold"))
@@ -282,13 +283,14 @@ def normalStart():
         submit.destroy()
         btnBack.destroy()
         menu()
+        nm.score = 0
 
     def submt(var1):
         global correct, wrong, wrong_score
         if var1.get() == str(resultPLUS()):
             correct = customtkinter.CTkLabel(
                 master=root,
-                text="Correct!",
+                text="Correct! +2",
                 text_color="#79ae61",
                 fg_color=("#262626"),
                 text_font= ("Courier 16 bold"))
@@ -506,13 +508,14 @@ def hardStart():
         submit.destroy()
         btnBack.destroy()
         menu()
+        hd.score = 0
 
     def submt(var1):
         global correct, wrong, wrong_score
         if var1.get() == str(resultPLUS()):
             correct = customtkinter.CTkLabel(
                 master=root,
-                text="Correct!",
+                text="Correct! +3",
                 text_color="#79ae61",
                 fg_color=("#262626"),
                 text_font= ("Courier 16 bold"))
