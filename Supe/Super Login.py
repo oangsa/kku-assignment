@@ -75,6 +75,7 @@ def easyStart():
         submit.destroy()
         btnBack.destroy()
         menu()
+        ez.score = 0
 
     def submt(var1):
         global correct, wrong, wrong_score
@@ -282,6 +283,7 @@ def normalStart():
         submit.destroy()
         btnBack.destroy()
         menu()
+        nm.score = 0
 
     def submt(var1):
         global correct, wrong, wrong_score
@@ -503,6 +505,7 @@ def hardStart():
         submit.destroy()
         btnBack.destroy()
         menu()
+        hd.score = 0
 
     def submt(var1):
         global correct, wrong, wrong_score
