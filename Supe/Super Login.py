@@ -331,8 +331,6 @@ def normalStart():
                 collection.update_one(filter, current_scores)
                 root.after(3000, goback)
             
-
-
     def try_again():
         global newQ
         newQ.destroy()
