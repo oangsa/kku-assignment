@@ -31,11 +31,7 @@ label = Label(
     root,
     fg="red",
     font=("Mali", 16))
-<<<<<<< HEAD
-label.config(text=("\n".join(lst)))
-label.place(relx=0.5, rely=0.17)
-=======
+
 label.config(text=("TOP 5 HIGHEST SCORE:\n\n"+"\n\n".join(lst)))
 label.place(relx=0.280, rely=0.17)
->>>>>>> 4ec840cef220f73af5d982e105d1a79c1ca10541
 root.mainloop()

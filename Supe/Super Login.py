@@ -7,7 +7,6 @@ import customtkinter
 import string, json, tkinter, secrets
 import random as rd
 import math as m
-from genericpath import exists
 from pymongo import MongoClient
 from tkinter import *
 from tkinter import messagebox
@@ -45,6 +44,26 @@ def destroy():
     root.destroy()
 def easyStart():
     def goback():
+        if regis.reg == 1:
+            filter = {"username":regData.username.lower()}
+            high_scores = {'$set':{"highest_scores":ez.score}}
+            current_scores = {'$set':{"lastest_scores":ez.score}}
+            res = collection.find_one({"username":regData.username.lower()})
+            if ez.score > res["highest_scores"]:
+                collection.update_one(filter, high_scores)
+            else:
+                pass
+            collection.update_one(filter, current_scores)
+        else:
+            filter = {"username":logData.username}
+            high_scores = {'$set':{"highest_scores":ez.score}}
+            current_scores = {'$set':{"lastest_scores":ez.score}}
+            res = collection.find_one({"username":logData.username})
+            if ez.score > res["highest_scores"]:
+                collection.update_one(filter, high_scores)
+            else:
+                pass
+            collection.update_one(filter, current_scores)
         solving.delete(0,END)
         correct.destroy()
         wrong.destroy()
@@ -85,10 +104,10 @@ def easyStart():
                 text_font= ("Courier 16 bold"))
             wrong_score.place(relx=0.5, rely=0.305, anchor=customtkinter.CENTER)
             if regis.reg == 1:
-                filter = {"username":regData.username}
+                filter = {"username":regData.username.lower()}
                 high_scores = {'$set':{"highest_scores":ez.score}}
                 current_scores = {'$set':{"lastest_scores":ez.score}}
-                res = collection.find_one({"username":regData.username})
+                res = collection.find_one({"username":regData.username.lower()})
                 if ez.score > res["highest_scores"]:
                     collection.update_one(filter, high_scores)
                 else:
@@ -272,10 +291,10 @@ def normalStart():
                 text_font= ("Courier 16 bold"))
             wrong_score.place(relx=0.5, rely=0.305, anchor=customtkinter.CENTER)
             if regis.reg == 1:
-                filter = {"username":regData.username}
+                filter = {"username":regData.username.lower()}
                 high_scores = {'$set':{"highest_scores":nm.score}}
                 current_scores = {'$set':{"lastest_scores":nm.score}}
-                res = collection.find_one({"username":regData.username})
+                res = collection.find_one({"username":regData.username.lower()})
                 if nm.score > res["highest_scores"]:
                     collection.update_one(filter, high_scores)
                 else:
@@ -475,10 +494,10 @@ def hardStart():
                 text_font= ("Courier 16 bold"))
             wrong_score.place(relx=0.5, rely=0.305, anchor=customtkinter.CENTER)
             if regis.reg == 1:
-                filter = {'username':regData.username}
+                filter = {'username':regData.username.lower()}
                 high_scores = {'$set':{"highest_scores":hd.score}}
                 current_scores = {'$set':{"lastest_scores":hd.score}}
-                res = collection.find_one({"username":regData.username})
+                res = collection.find_one({"username":regData.username.lower()})
                 if hd.score > res["highest_scores"]:
                     collection.update_one(filter, high_scores)
                 else:
@@ -654,27 +673,22 @@ def leaderStart():
         scoreb.destroy()
         btnBack.destroy()
         menu()
+    
 
-    with open('env.json') as d:
-        dictData = json.load(d)
-        cluster = MongoClient(dictData["dbURL"])
-
-    db = cluster["test"]
-    collection = db["test"]
+    if regis.reg == 1:
+        leadres = collection.find_one({"username":regData.username.lower()})
+    else:
+        leadres = collection.find_one({"username":logData.username})
 
     res = collection.find().sort("highest_scores", -1).limit(7)
-
     rank = 0
     lst = []
-
     for i in res:
         u = i["username"]
         s = i["highest_scores"]
         rank += 1
         tab = "\t\t"
         lst.append(f"{rank}. name: {u}{tab}Scores: {s}")
-
-    print(lst)
 
     leadtext = customtkinter.CTkLabel(
         root,
@@ -693,6 +707,19 @@ def leaderStart():
         corner_radius=6,
         justify=tkinter.LEFT)
     leaderboard.place(relx=0.5, rely=0.5, relwidth=1, relheight=0.5, anchor=customtkinter.CENTER)
+
+    cs = leadres["lastest_scores"]
+    hs = leadres["highest_scores"]
+    
+    score = customtkinter.CTkLabel(
+        root,
+        text=(f"Your Current Scores: {cs}, Your Highest Scores: {hs}"),
+        text_font= ("Courier 16"),
+        text_color='#eda850',
+        fg_color=("#262626"),
+        corner_radius=6,
+        justify=tkinter.LEFT)
+    score.place(relx=0.5, rely=0.9, relwidth=1, relheight=0.5, anchor=customtkinter.CENTER)
 
     userb = customtkinter.CTkLabel(
         root,
@@ -881,7 +908,7 @@ def menu():
 
     lblrule = customtkinter.CTkLabel(
         root,
-        text = "WARNING! in every divisions questions, you need to answer with 2 decimals",
+        text = "WARNING! in every divisions and mutiplications questions, you need to answer with 2 decimals",
         text_color="#c75d55",
         text_font="Consolas 8"
     )
@@ -907,7 +934,7 @@ def menu():
 def loginIspressed():
     def logindestroy():
         global logData, username, password, log_pass
-        username = logEnUsername.get()
+        username = logEnUsername.get().lower()
         password = logEnPassword.get()
         logData = user_pass(username, password)
         log_pass = False
@@ -924,7 +951,7 @@ def loginIspressed():
                     log_pass = True
                     return log_pass
             else:
-                messagebox.showerror(title="Error", message="Please enter your Username or Password.")
+                messagebox.showerror(title="Error", message="Username or Password is invalid")
                 logEnUsername.delete(0, END)
                 logEnPassword.delete(0, END)
         
@@ -1009,7 +1036,7 @@ def registerIspressed():
         global regData
         regData = user_pass(RegEnUsername.get(), RegEnPassword.get())
         if regData.username != "" or regData.password != "":
-            if collection.find_one({"username":regData.username}):
+            if collection.find_one({"username":regData.username.lower()}):
                 messagebox.showerror(title="Error", message="Username is already exist.")
                 RegEnUsername.delete(0, END)
                 RegEnPassword.delete(0, END)
@@ -1025,7 +1052,7 @@ def registerIspressed():
                         messagebox.showerror(title="Error", message="Username is invalid.")
                     else:
                         regis.reg = 1
-                        collection.insert_one({"_id":i,"username":regData.username,"password":regData.password, "highest_scores":0, "lastest_scores":0})
+                        collection.insert_one({"_id":i,"username":regData.username.lower(),"password":regData.password, "highest_scores":0, "lastest_scores":0})
                         logusername.destroy()
                         RegEnUsername.destroy()
                         regpassword.destroy()
