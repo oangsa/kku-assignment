@@ -1129,5 +1129,7 @@ def loginmenu():
         text_font= ("Courier 16 bold"))
     wrong_score.place(relx=0.5, rely=0.55, relwidth=0.1, relheight=0.05, anchor=customtkinter.CENTER)
 
+
+
 loginmenu()
 root.mainloop()
