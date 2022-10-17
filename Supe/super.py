@@ -917,8 +917,11 @@ def settingStart():
     
     def default_color_theme(new_default_color_theme):
         customtkinter.set_default_color_theme(new_default_color_theme)
-        root.update_idletasks()
-        root.update_dimensions_event()
+        leadtext.destroy()
+        btnBack.destroy()
+        selectThemesLabel.destroy()
+        themesMenu.destroy()
+        settingStart()
     
     leadtext = customtkinter.CTkLabel(
         root,
@@ -941,7 +944,7 @@ def settingStart():
         values=["blue", "green", "dark-blue"],
         command= default_color_theme
     )
-    themesMenu.place(relx=0.5, rely=0.23,anchor=customtkinter.CENTER)
+    themesMenu.place(relx=0.5, rely=0.26,anchor=customtkinter.CENTER)
     
     
     btnBack = customtkinter.CTkButton(
