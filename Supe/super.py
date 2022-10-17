@@ -1,14 +1,11 @@
-from glob import glob
 import tkinter
 import customtkinter
-import string, tkinter, secrets
+import string, tkinter, secrets, time, threading
 import random as rd
 import math as m
 from pymongo import MongoClient
 from tkinter import *
 from tkinter import messagebox
-import threading
-import sched, time
 
 customtkinter.set_appearance_mode("default")  # Modes: system (default), light, dark
 customtkinter.set_default_color_theme("green")  # Themes: blue (default), dark-blue, green
