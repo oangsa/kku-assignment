@@ -231,7 +231,7 @@ def easyStart():
     def start():
         try_again()
         btnBack.destroy()
-        progbar.place(relx=0.5, rely=0.7,anchor=customtkinter.CENTER)
+        progbar.place(relx=0.5, rely=0.4,anchor=customtkinter.CENTER)
         submit.place(relx=0.5, rely=0.6, relwidth=0.24, relheight=0.13, anchor=customtkinter.CENTER)
         progbar.set(0,100)
         progbar.start()
@@ -318,8 +318,8 @@ def normalStart():
         except KeyboardInterrupt:
             print("You tring to interrupt this program.")
             exit()
-
     
+
     t = threading.Thread(target=timer)
     
     def goback():
@@ -409,7 +409,7 @@ def normalStart():
                     pass
                 collection.update_one(filter, current_scores)
                 root.after(3000, goback)
-
+            
     def try_again():
         global newQ
         newQ.destroy()
@@ -578,9 +578,9 @@ def hardStart():
             print("You tring to interrupt this program.")
             exit()
 
-    
+
     t = threading.Thread(target=timer)
-    
+
     def goback():
         global flag
         flag = False
@@ -771,9 +771,6 @@ def hardStart():
         btnBack.destroy()
         progbar.place(relx=0.5, rely=0.7,anchor=customtkinter.CENTER)
         submit.place(relx=0.5, rely=0.6, relwidth=0.24, relheight=0.13, anchor=customtkinter.CENTER)
-        progbar.set(0,100)
-        progbar.start()
-        t.start()
 
     hardtext = customtkinter.CTkLabel(
         master=root,
