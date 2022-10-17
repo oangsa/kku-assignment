@@ -43,6 +43,7 @@ def easyStart():
         master = root,
         width = 500,
         mode = "determinate",
+        progress_color = "#79ae61",
         determinate_speed = 0.07
     )
     flag = True
@@ -52,7 +53,6 @@ def easyStart():
                 time.sleep(0.1)
                 value = progbar.get()
                 value = "%.2f" % value
-                # print(value)
                 try:
                     if 'normal' == root.state():
                         if float(value) > 0.99:
@@ -60,7 +60,7 @@ def easyStart():
                     else:
                         break
                 except RuntimeError:
-                    messagebox.showerror(title="Error", message="You tring to exit this game while playing our game :(")
+                    messagebox.showerror(title="Error", message="You tring to exit our game while playing the game :(")
                     # print("You tring to exit this program while playing this game.")
                     exit()
         except KeyboardInterrupt:
@@ -104,13 +104,12 @@ def easyStart():
         solving.destroy()
         submit.destroy()
         btnBack.destroy()
+        scoreText.destroy()
         menu()
         ez.score = 0
 
     def submt(var1):
         global correct, wrong, wrong_score
-        value = progbar.get()
-        print(value)
         if var1.get() == str(resultPLUS()):
             correct = customtkinter.CTkLabel(
                 master=root,
@@ -136,6 +135,8 @@ def easyStart():
                 fg_color=("#262626"),
                 text_font= ("Courier 16 bold"))
             wrong_score.place(relx=0.5, rely=0.305, anchor=customtkinter.CENTER)
+            scoreText.configure(text_color = "#c75d55")
+            progbar.configure(progress_color = "#c75d55")
             progbar.stop()
             if regis.reg == 1:
                 filter = {"username":regData.username.lower()}
@@ -223,13 +224,14 @@ def easyStart():
             )
             newQ.place(relx=0.5, rely=0.25, relwidth=0.7, relheight=0.23, anchor=customtkinter.CENTER)
         progbar.set(0,100)
-        root.update_idletasks()
+        scoreText.configure(text=f"Total Score(s): {ez.score}")
     
     def start():
         try_again()
         btnBack.destroy()
-        progbar.place(relx=0.5, rely=0.4,anchor=customtkinter.CENTER)
+        progbar.place(relx=0.5, rely=0.04,anchor=customtkinter.CENTER)
         submit.place(relx=0.5, rely=0.6, relwidth=0.24, relheight=0.13, anchor=customtkinter.CENTER)
+        scoreText.configure(text=f"Total Score(s): {ez.score}")
         progbar.set(0,100)
         progbar.start()
         t.start()
@@ -242,6 +244,15 @@ def easyStart():
     def delete():
         solving.delete(1)
 
+    scoreText = customtkinter.CTkLabel(
+        master=root,
+        text = "",
+        text_font= ("Courier 18 bold"),
+        text_color='#79ae61'
+    )
+    scoreText.place(relx=0.5, rely=0.75, anchor=customtkinter.CENTER)
+    
+    
     easytext = customtkinter.CTkLabel(
         master=root,
         text = "EASY MODE",
@@ -292,6 +303,7 @@ def normalStart():
         master = root,
         width = 500,
         mode = "determinate",
+        progress_color= "#eda850",
         determinate_speed = 0.07
     )
     flag = True
@@ -309,7 +321,7 @@ def normalStart():
                     else:
                         break
                 except RuntimeError:
-                    messagebox.showerror(title="Error", message="You tring to exit this game while playing our game :(")
+                    messagebox.showerror(title="Error", message="You tring to exit our game while playing the game :(")
                     # print("You tring to exit this program while playing this game.")
                     exit()
         except KeyboardInterrupt:
@@ -353,6 +365,7 @@ def normalStart():
         submit.destroy()
         btnBack.destroy()
         progbar.destroy()
+        scoreText.destroy()
         menu()
         nm.score = 0
 
@@ -383,6 +396,8 @@ def normalStart():
                 fg_color=("#262626"),
                 text_font= ("Courier 16 bold"))
             wrong_score.place(relx=0.5, rely=0.305, anchor=customtkinter.CENTER)
+            scoreText.configure(text_color = "#c75d55")
+            progbar.configure(progress_color = "#c75d55")
             progbar.stop()
             if regis.reg == 1:
                 filter = {"username":regData.username.lower()}
@@ -484,7 +499,8 @@ def normalStart():
                 text_font= ("Courier 16 bold")
             )
             newQ.place(relx=0.5, rely=0.25, relwidth=0.7, relheight=0.23, anchor=customtkinter.CENTER)
-
+        progbar.set(0,100)
+        scoreText.configure(text = f"Total Score(s): {nm.score}")
 
     def resultPLUS():
         try_again
@@ -496,11 +512,20 @@ def normalStart():
     def start():
         try_again()
         btnBack.destroy()
-        progbar.place(relx=0.5, rely=0.7,anchor=customtkinter.CENTER)
+        progbar.place(relx=0.5, rely=0.04,anchor=customtkinter.CENTER)
         submit.place(relx=0.5, rely=0.6, relwidth=0.24, relheight=0.13, anchor=customtkinter.CENTER)
+        scoreText.configure(text = f"Total Score(s): 0")
         progbar.set(0,100)
         progbar.start()
         t.start()
+
+    scoreText = customtkinter.CTkLabel(
+        master=root,
+        text = "",
+        text_font= ("Courier 18 bold"),
+        text_color='#79ae61'
+    )
+    scoreText.place(relx=0.5, rely=0.75, anchor=customtkinter.CENTER)
 
     normaltext = customtkinter.CTkLabel(
         master=root,
@@ -551,6 +576,7 @@ def hardStart():
         master = root,
         width = 500,
         mode = "determinate",
+        progress_color= "#FFA500",
         determinate_speed = 0.07
     )
     flag = True
@@ -568,7 +594,7 @@ def hardStart():
                     else:
                         break
                 except RuntimeError:
-                    messagebox.showerror(title="Error", message="You tring to exit this game while playing our game :(")
+                    messagebox.showerror(title="Error", message="You tring to exit our game while playing the game :(")
                     # print("You tring to exit this program while playing this game.")
                     exit()
         except KeyboardInterrupt:
@@ -612,6 +638,7 @@ def hardStart():
         submit.destroy()
         btnBack.destroy()
         progbar.destroy()
+        scoreText.destroy()
         menu()
         hd.score = 0
 
@@ -627,6 +654,7 @@ def hardStart():
             correct.place(relx=0.5, rely=0.17, anchor=customtkinter.CENTER)
             hd.score += 3
             root.after(500, try_again)
+            progbar.set(0,100)
         else:
             wrong = customtkinter.CTkLabel(
                 root,
@@ -642,6 +670,8 @@ def hardStart():
                 fg_color=("#262626"),
                 text_font= ("Courier 16 bold"))
             wrong_score.place(relx=0.5, rely=0.305, anchor=customtkinter.CENTER)
+            progbar.configure(progress_color = "#c75d55")
+            scoreText.configure(text_color = "#c75d55")
             progbar.stop()
             if regis.reg == 1:
                 filter = {'username':regData.username.lower()}
@@ -755,6 +785,8 @@ def hardStart():
                 text_font= ("Courier 16 bold")
             )
             newQ.place(relx=0.5, rely=0.25, relwidth=0.7, relheight=0.23, anchor=customtkinter.CENTER)
+        scoreText.configure(text=f"Total Score(s): {hd.score}")
+        progbar.set(0,100)
 
     def resultPLUS():
         try_again
@@ -766,8 +798,21 @@ def hardStart():
     def start():
         try_again()
         btnBack.destroy()
-        progbar.place(relx=0.5, rely=0.7,anchor=customtkinter.CENTER)
+        progbar.place(relx=0.5, rely=0.04,anchor=customtkinter.CENTER)
         submit.place(relx=0.5, rely=0.6, relwidth=0.24, relheight=0.13, anchor=customtkinter.CENTER)
+        scoreText.configure(text=f"Total Score(s): 0")
+        progbar.set(0,100)
+        progbar.start()
+        t.start()
+        
+    scoreText = customtkinter.CTkLabel(
+        master=root,
+        text = "",
+        text_font= ("Courier 18 bold"),
+        text_color='#79ae61'
+    )
+    scoreText.place(relx=0.5, rely=0.75, anchor=customtkinter.CENTER)
+
 
     hardtext = customtkinter.CTkLabel(
         master=root,
@@ -908,20 +953,25 @@ def leaderStart():
 
 def settingStart():
     
-    def goback():
+    def reset():
         leadtext.destroy()
         btnBack.destroy()
         selectThemesLabel.destroy()
         themesMenu.destroy()
+        # selectAppearanceLabel.destroy()
+        # appearanceMenu.destroy()
+    
+    def goback():
+        reset()
         menu()
     
     def default_color_theme(new_default_color_theme):
         customtkinter.set_default_color_theme(new_default_color_theme)
-        leadtext.destroy()
-        btnBack.destroy()
-        selectThemesLabel.destroy()
-        themesMenu.destroy()
+        reset()
         settingStart()
+    
+    def appearance_mode(new_appearance_mode):
+        customtkinter.set_appearance_mode(new_appearance_mode)
     
     leadtext = customtkinter.CTkLabel(
         root,
@@ -938,14 +988,26 @@ def settingStart():
     )
     selectThemesLabel.place(relx=0.5, rely=0.19,anchor=customtkinter.CENTER)
     
-    
     themesMenu = customtkinter.CTkOptionMenu(
         master = root,
         values=["blue", "green", "dark-blue"],
         command= default_color_theme
     )
-    themesMenu.place(relx=0.5, rely=0.26,anchor=customtkinter.CENTER)
+    themesMenu.place(relx=0.5, rely=0.24,anchor=customtkinter.CENTER)
     
+    # selectAppearanceLabel = customtkinter.CTkLabel(
+    #     master = root, 
+    #     text = "Appearance Modes:",
+    #     text_color="white",
+    # )
+    # selectAppearanceLabel.place(relx=0.5, rely=0.32,anchor=customtkinter.CENTER)
+    
+    # appearanceMenu = customtkinter.CTkOptionMenu(
+    #     master = root,
+    #     values=["System", "Dark", "Light"],
+    #     command= appearance_mode
+    # )
+    # appearanceMenu.place(relx=0.5, rely=0.37,anchor=customtkinter.CENTER)
     
     btnBack = customtkinter.CTkButton(
         master= root,
