@@ -906,7 +906,60 @@ def leaderStart():
         command = goback)
     btnBack.place(relx=0.5, rely=0.7,anchor=customtkinter.CENTER)
 
+def settingStart():
+    
+    def goback():
+        leadtext.destroy()
+        btnBack.destroy()
+        selectThemesLabel.destroy()
+        themesMenu.destroy()
+        menu()
+    
+    def default_color_theme(new_default_color_theme):
+        customtkinter.set_default_color_theme(new_default_color_theme)
+        root.update_idletasks()
+        root.update_dimensions_event()
+    
+    leadtext = customtkinter.CTkLabel(
+        root,
+        text = "SETTINGS",
+        text_font= ("Courier 30 bold"),
+        text_color='#ADD8E6'
+    )
+    leadtext.pack(pady=(30,30))
 
+    selectThemesLabel = customtkinter.CTkLabel(
+        master = root, 
+        text = "Color Themes:",
+        text_color="white",
+    )
+    selectThemesLabel.place(relx=0.5, rely=0.19,anchor=customtkinter.CENTER)
+    
+    
+    themesMenu = customtkinter.CTkOptionMenu(
+        master = root,
+        values=["blue", "green", "dark-blue"],
+        command= default_color_theme
+    )
+    themesMenu.place(relx=0.5, rely=0.23,anchor=customtkinter.CENTER)
+    
+    
+    btnBack = customtkinter.CTkButton(
+        master= root,
+        text= "Go Back",
+        text_font="Courier 10",
+        text_color="white",
+        hover= True,
+        hover_color= "black",
+        height=40,
+        width= 120,
+        border_width=2,
+        corner_radius=3,
+        border_color= "black", 
+        bg_color="#262626",
+        fg_color= "#262626",
+        command = goback)
+    btnBack.place(relx=0.5, rely=0.7,anchor=customtkinter.CENTER)
 
 root = customtkinter.CTk()
 root.title("Super Quiz")
@@ -924,6 +977,7 @@ def menu():
         btnStartLeader.destroy()
         btnLogout.destroy()
         lblrule.destroy()
+        btnStartSetting.destroy()
         easyStart()
 
     def normalIspressed():
@@ -935,6 +989,7 @@ def menu():
         btnStartLeader.destroy()
         btnLogout.destroy()
         lblrule.destroy()
+        btnStartSetting.destroy()
         normalStart()
 
     def hardIspressed():
@@ -946,6 +1001,7 @@ def menu():
         btnStartLeader.destroy()
         btnLogout.destroy()
         lblrule.destroy()
+        btnStartSetting.destroy()
         hardStart()
 
     def leaderIspressed():
@@ -957,6 +1013,7 @@ def menu():
         btnStartLeader.destroy()
         btnLogout.destroy()
         lblrule.destroy()
+        btnStartSetting.destroy()
         leaderStart()
 
     def logoutIspressed():
@@ -968,7 +1025,21 @@ def menu():
         btnStartLeader.destroy()
         btnLogout.destroy()
         lblrule.destroy()
+        btnStartSetting.destroy()
         loginmenu()
+        
+    def settingIspressed():
+        labeltext.destroy()
+        btnStartEasy.destroy()
+        btnStartNormal.destroy()
+        btnStartHard.destroy()
+        lblInstruction.destroy()
+        btnStartLeader.destroy()
+        btnLogout.destroy()
+        lblrule.destroy()
+        btnStartSetting.destroy()
+        settingStart()
+
 
     labeltext = customtkinter.CTkLabel(
         root,
@@ -1031,6 +1102,23 @@ def menu():
         command = hardIspressed)
 
     btnStartHard.pack(pady=(10,0))
+    
+    btnStartSetting = customtkinter.CTkButton(
+        master= root,
+        text= "SETTINGS",
+        text_font="none 10",
+        text_color="white",
+        hover= True,
+        hover_color= "#ADD8E6",
+        height=40,
+        width= 120,
+        border_width=2,
+        corner_radius=3,
+        border_color= "#ADD8E6", 
+        bg_color="#262626",
+        fg_color= "#262626",
+        command = settingIspressed)
+    btnStartSetting.pack(pady=(10,0))
 
     btnStartLeader = customtkinter.CTkButton(
         master= root,
@@ -1047,7 +1135,8 @@ def menu():
         bg_color="#262626",
         fg_color= "#262626",
         command = leaderIspressed)
-    btnStartLeader.pack(pady=(10,50))
+    btnStartLeader.pack(pady=(10,40))
+    
 
     lblInstruction = customtkinter.CTkLabel(
         root,
@@ -1111,6 +1200,7 @@ def loginIspressed():
             logpassword.destroy()
             logEnPassword.destroy()
             btnGoLogin.destroy()
+            btnBack.destroy()
             # messagebox.showinfo(title="Success", message="Loggedin Success!")
             menu()
 
@@ -1120,6 +1210,31 @@ def loginIspressed():
     correct.destroy()
     wrong.destroy()
     wrong_score.destroy()
+    def goback():
+        logusername.destroy()
+        logEnUsername.destroy()
+        logpassword.destroy()
+        logEnPassword.destroy()
+        btnGoLogin.destroy()
+        btnBack.destroy()
+        loginmenu()
+    
+    btnBack = customtkinter.CTkButton(
+        master= root,
+        text= "Go Back",
+        text_font="Courier 10",
+        text_color="white",
+        hover= True,
+        hover_color= "black",
+        height=40,
+        width= 120,
+        border_width=2,
+        corner_radius=3,
+        border_color= "black", 
+        bg_color="#262626",
+        fg_color= "#262626",
+        command = goback)
+    btnBack.place(relx=0.5, rely=0.75,anchor=customtkinter.CENTER)
     logusername = customtkinter.CTkLabel(
         root,
         text_font="Courier 12",
@@ -1208,6 +1323,7 @@ def registerIspressed():
                         regpassword.destroy()
                         RegEnPassword.destroy()
                         btnGoReg.destroy()
+                        btnBack.destroy()
                         messagebox.showinfo(title="Success", message="Registered success!")
                         menu()
         else:
@@ -1220,6 +1336,17 @@ def registerIspressed():
     correct.destroy()
     wrong.destroy()
     wrong_score.destroy()
+    
+    
+    def goback():
+        logusername.destroy()
+        RegEnUsername.destroy()
+        regpassword.destroy()
+        RegEnPassword.destroy()
+        btnGoReg.destroy()
+        btnBack.destroy()
+        loginmenu()
+    
     logusername = customtkinter.CTkLabel(
         root,
         text_font="Courier 12",
@@ -1254,6 +1381,23 @@ def registerIspressed():
         command = registerdestroy,
     )
     btnGoReg.place(relx=0.5, rely=0.6, anchor=customtkinter.CENTER)
+    
+    btnBack = customtkinter.CTkButton(
+        master= root,
+        text= "Go Back",
+        text_font="Courier 10",
+        text_color="white",
+        hover= True,
+        hover_color= "black",
+        height=40,
+        width= 120,
+        border_width=2,
+        corner_radius=3,
+        border_color= "black", 
+        bg_color="#262626",
+        fg_color= "#262626",
+        command = goback)
+    btnBack.place(relx=0.5, rely=0.75,anchor=customtkinter.CENTER)
 
 def loginmenu():
     global btnLogin, btnRegister, newQ, correct, wrong, wrong_score
