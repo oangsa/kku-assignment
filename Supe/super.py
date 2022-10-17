@@ -1,5 +1,5 @@
+from glob import glob
 import tkinter
-import tkinter.messagebox
 import customtkinter
 import string, tkinter, secrets
 import random as rd
@@ -7,6 +7,8 @@ import math as m
 from pymongo import MongoClient
 from tkinter import *
 from tkinter import messagebox
+import threading
+import sched, time
 
 customtkinter.set_appearance_mode("default")  # Modes: system (default), light, dark
 customtkinter.set_default_color_theme("green")  # Themes: blue (default), dark-blue, green
@@ -39,13 +41,41 @@ hd = score(0)
 def destroy():
     root.destroy()
 def easyStart():
-    # progbar = customtkinter.CTkProgressBar(
-    #     master = root,
-    #     width = 500,
-    #     mode = "determinate",
-    #     determinate_speed = 0.15
-    # )
+    global flag, t
+    progbar = customtkinter.CTkProgressBar(
+        master = root,
+        width = 500,
+        mode = "determinate",
+        determinate_speed = 0.07
+    )
+    flag = True
+    def timer():
+        try:
+            while(flag):
+                time.sleep(0.1)
+                value = progbar.get()
+                value = "%.2f" % value
+                # print(value)
+                try:
+                    if 'normal' == root.state():
+                        if float(value) > 0.99:
+                            try_again()
+                    else:
+                        break
+                except RuntimeError:
+                    messagebox.showerror(title="Error", message="You tring to exit this game while playing our game :(")
+                    # print("You tring to exit this program while playing this game.")
+                    exit()
+        except KeyboardInterrupt:
+            print("You tring to interrupt this program.")
+            exit()
+
+    
+    t = threading.Thread(target=timer)
+
     def goback():
+        global flag
+        flag = False
         if regis.reg == 1:
             filter = {"username":regData.username.lower()}
             high_scores = {'$set':{"highest_scores":ez.score}}
@@ -68,6 +98,7 @@ def easyStart():
             collection.update_one(filter, current_scores)
         solving.delete(0,END)
         correct.destroy()
+        progbar.destroy()
         wrong.destroy()
         wrong_score.destroy()
         newQ.destroy()
@@ -81,8 +112,8 @@ def easyStart():
 
     def submt(var1):
         global correct, wrong, wrong_score
-        # value = progbar.get()
-        # print(value)
+        value = progbar.get()
+        print(value)
         if var1.get() == str(resultPLUS()):
             correct = customtkinter.CTkLabel(
                 master=root,
@@ -108,6 +139,7 @@ def easyStart():
                 fg_color=("#262626"),
                 text_font= ("Courier 16 bold"))
             wrong_score.place(relx=0.5, rely=0.305, anchor=customtkinter.CENTER)
+            progbar.stop()
             if regis.reg == 1:
                 filter = {"username":regData.username.lower()}
                 high_scores = {'$set':{"highest_scores":ez.score}}
@@ -118,7 +150,6 @@ def easyStart():
                 else:
                     pass
                 collection.update_one(filter, current_scores)
-                # progbar.stop()
                 root.after(3000, goback)
             else:
                 filter = {"username":logData.username}
@@ -130,12 +161,12 @@ def easyStart():
                 else:
                     pass
                 collection.update_one(filter, current_scores)
-                # progbar.stop()
                 root.after(3000, goback)
     
     def try_again():
         global newQ
         newQ.destroy()
+        correct.destroy()
         solving.delete(0,END)
         try_again.num1update = rd.randint(0,999)
         try_again.num2update = rd.randint(0,999)
@@ -194,15 +225,18 @@ def easyStart():
                 text_font= ("Courier 16 bold")
             )
             newQ.place(relx=0.5, rely=0.25, relwidth=0.7, relheight=0.23, anchor=customtkinter.CENTER)
-
+        progbar.set(0,100)
+        root.update_idletasks()
     
     def start():
         try_again()
         btnBack.destroy()
-        # progbar.place(relx=0.5, rely=0.7,anchor=customtkinter.CENTER)
+        progbar.place(relx=0.5, rely=0.7,anchor=customtkinter.CENTER)
         submit.place(relx=0.5, rely=0.6, relwidth=0.24, relheight=0.13, anchor=customtkinter.CENTER)
-        # progbar.set(0,100)
-        # progbar.start()
+        progbar.set(0,100)
+        progbar.start()
+        t.start()
+        
  
     def resultPLUS():
         try_again
@@ -255,11 +289,42 @@ def easyStart():
         command = goback)
     btnBack.place(relx=0.5, rely=0.75,anchor=customtkinter.CENTER)
 
-    
-
 def normalStart():
-    global try_again
+    global flag, t
+    progbar = customtkinter.CTkProgressBar(
+        master = root,
+        width = 500,
+        mode = "determinate",
+        determinate_speed = 0.07
+    )
+    flag = True
+    def timer():
+        try:
+            while(flag):
+                time.sleep(0.1)
+                value = progbar.get()
+                value = "%.2f" % value
+                # print(value)
+                try:
+                    if 'normal' == root.state():
+                        if float(value) > 0.99:
+                            try_again()
+                    else:
+                        break
+                except RuntimeError:
+                    messagebox.showerror(title="Error", message="You tring to exit this game while playing our game :(")
+                    # print("You tring to exit this program while playing this game.")
+                    exit()
+        except KeyboardInterrupt:
+            print("You tring to interrupt this program.")
+            exit()
+
+    
+    t = threading.Thread(target=timer)
+    
     def goback():
+        global flag
+        flag = False
         if regis.reg == 1:
             filter = {"username":regData.username.lower()}
             high_scores = {'$set':{"highest_scores":nm.score}}
@@ -290,6 +355,7 @@ def normalStart():
         solving.destroy()
         submit.destroy()
         btnBack.destroy()
+        progbar.destroy()
         menu()
         nm.score = 0
 
@@ -320,6 +386,7 @@ def normalStart():
                 fg_color=("#262626"),
                 text_font= ("Courier 16 bold"))
             wrong_score.place(relx=0.5, rely=0.305, anchor=customtkinter.CENTER)
+            progbar.stop()
             if regis.reg == 1:
                 filter = {"username":regData.username.lower()}
                 high_scores = {'$set':{"highest_scores":nm.score}}
@@ -342,12 +409,11 @@ def normalStart():
                     pass
                 collection.update_one(filter, current_scores)
                 root.after(3000, goback)
-            
-
 
     def try_again():
         global newQ
         newQ.destroy()
+        correct.destroy()
         solving.delete(0,END)
         try_again.num1update = rd.randint(0,99999)
         try_again.num2update = rd.randint(0,99999)
@@ -433,7 +499,11 @@ def normalStart():
     def start():
         try_again()
         btnBack.destroy()
+        progbar.place(relx=0.5, rely=0.7,anchor=customtkinter.CENTER)
         submit.place(relx=0.5, rely=0.6, relwidth=0.24, relheight=0.13, anchor=customtkinter.CENTER)
+        progbar.set(0,100)
+        progbar.start()
+        t.start()
 
     normaltext = customtkinter.CTkLabel(
         master=root,
@@ -478,17 +548,42 @@ def normalStart():
         command = goback)
     btnBack.place(relx=0.5, rely=0.75,anchor=customtkinter.CENTER)
 
-    # try_again = Button(
-    #     root,
-    #     text = "Try Again",
-    #     font = ("Courier", 16),
-    #     command = try_again)
-    # try_again.place(relx=0.42, rely=0.9)
-
-
 def hardStart():
-    global try_again
+    global flag, t
+    progbar = customtkinter.CTkProgressBar(
+        master = root,
+        width = 500,
+        mode = "determinate",
+        determinate_speed = 0.07
+    )
+    flag = True
+    def timer():
+        try:
+            while(flag):
+                time.sleep(0.1)
+                value = progbar.get()
+                value = "%.2f" % value
+                # print(value)
+                try:
+                    if 'normal' == root.state():
+                        if float(value) > 0.99:
+                            try_again()
+                    else:
+                        break
+                except RuntimeError:
+                    messagebox.showerror(title="Error", message="You tring to exit this game while playing our game :(")
+                    # print("You tring to exit this program while playing this game.")
+                    exit()
+        except KeyboardInterrupt:
+            print("You tring to interrupt this program.")
+            exit()
+
+    
+    t = threading.Thread(target=timer)
+    
     def goback():
+        global flag
+        flag = False
         if regis.reg == 1:
             filter = {"username":regData.username.lower()}
             high_scores = {'$set':{"highest_scores":hd.score}}
@@ -519,6 +614,7 @@ def hardStart():
         solving.destroy()
         submit.destroy()
         btnBack.destroy()
+        progbar.destroy()
         menu()
         hd.score = 0
 
@@ -549,6 +645,7 @@ def hardStart():
                 fg_color=("#262626"),
                 text_font= ("Courier 16 bold"))
             wrong_score.place(relx=0.5, rely=0.305, anchor=customtkinter.CENTER)
+            progbar.stop()
             if regis.reg == 1:
                 filter = {'username':regData.username.lower()}
                 high_scores = {'$set':{"highest_scores":hd.score}}
@@ -576,6 +673,7 @@ def hardStart():
     def try_again():
         global newQ
         newQ.destroy()
+        correct.destroy()
         solving.delete(0,END)
         try_again.num1update = rd.randint(0,9999999)
         try_again.num2update = rd.randint(0,9999999)
@@ -671,7 +769,11 @@ def hardStart():
     def start():
         try_again()
         btnBack.destroy()
+        progbar.place(relx=0.5, rely=0.7,anchor=customtkinter.CENTER)
         submit.place(relx=0.5, rely=0.6, relwidth=0.24, relheight=0.13, anchor=customtkinter.CENTER)
+        progbar.set(0,100)
+        progbar.start()
+        t.start()
 
     hardtext = customtkinter.CTkLabel(
         master=root,
