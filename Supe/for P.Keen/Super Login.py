@@ -1,7 +1,7 @@
 import tkinter
 import tkinter.messagebox
 import customtkinter
-import string, json, tkinter, secrets
+import string, tkinter, secrets
 import random as rd
 import math as m
 from pymongo import MongoClient
