@@ -1104,6 +1104,19 @@ def menu():
         lblrule.destroy()
         btnStartSetting.destroy()
         settingStart()
+        
+    def resetPassIspressed():
+        labeltext.destroy()
+        btnStartEasy.destroy()
+        btnStartNormal.destroy()
+        btnStartHard.destroy()
+        lblInstruction.destroy()
+        btnStartLeader.destroy()
+        btnLogout.destroy()
+        lblrule.destroy()
+        btnStartSetting.destroy()
+        settingStart()
+
 
 
     labeltext = customtkinter.CTkLabel(
@@ -1260,12 +1273,7 @@ def loginIspressed():
                 logEnPassword.delete(0, END)
         
         if checklog_secure() == True:
-            logusername.destroy()
-            logEnUsername.destroy()
-            logpassword.destroy()
-            logEnPassword.destroy()
-            btnGoLogin.destroy()
-            btnBack.destroy()
+            reset()
             # messagebox.showinfo(title="Success", message="Loggedin Success!")
             menu()
 
@@ -1275,14 +1283,219 @@ def loginIspressed():
     correct.destroy()
     wrong.destroy()
     wrong_score.destroy()
-    def goback():
+    
+    
+    def reset():
         logusername.destroy()
         logEnUsername.destroy()
         logpassword.destroy()
         logEnPassword.destroy()
         btnGoLogin.destroy()
         btnBack.destroy()
+        resetPass.destroy()
+    
+    
+    def resetPassIspressed():
+        reset()
+        
+        def check_secure():
+            password = resetEnPassword.get()
+            confpass = confResetEnPassword.get()
+            secure_pass = True
+            lower_case = any([1 if c in string.ascii_lowercase else 0 for c in password])
+            upper_case = any([1 if c in string.ascii_uppercase else 0 for c in password])
+            number = any([1 if c in string.digits else 0 for c in password])
+            if password != confpass:
+                messagebox.showerror(title="Error", message="Password isnt match.")
+                confResetEnPassword.delete(0, END)
+                secure_pass = False
+                return secure_pass
+                
+            if len(password) < 6:
+                messagebox.showerror(title="Error", message="Password must be at least 6 characters long.")
+                resetEnPassword.delete(0, END)
+                confResetEnPassword.delete(0, END)
+                secure_pass = False
+                return secure_pass
+
+            if number == False:
+                messagebox.showerror(title="Error", message="Password must be contain at least 1 number.")
+                resetEnPassword.delete(0, END)
+                confResetEnPassword.delete(0, END)
+                secure_pass = False
+                return secure_pass
+
+            if lower_case == False:
+                messagebox.showerror(title="Error", message="Password must be contain at least 1 character.")
+                resetEnPassword.delete(0, END)
+                confResetEnPassword.delete(0, END)
+                secure_pass = False
+                return secure_pass
+
+            if upper_case == False:
+                messagebox.showerror(title="Error", message="Password must be contain at least 1 upper character.")
+                resetEnPassword.delete(0, END)
+                confResetEnPassword.delete(0, END)
+                secure_pass = False
+                return secure_pass
+            secure_pass = True
+            return secure_pass
+            
+        class reset_user:
+            def __init__(self, username, password, confpassword):
+                self.username = username
+                self.password = password
+                self.confpassword = confpassword       
+        def resetDestroy():
+            resetData = reset_user(resetEnUsername.get().lower(), resetEnPassword.get(), confResetEnPassword.get())
+            res = collection.find_one({"username":resetData.username})
+            if resetData.username != "" and resetData.password != "" and resetData.confpassword != "":
+                if collection.find_one({"username":resetData.username}):
+                    if check_secure() == True:
+                        if resetData.username == "":
+                            messagebox.showerror(title="Error", message="Username is invalid.")
+                            resetEnUsername.delete(0, END)
+                            resetEnPassword.delete(0, END)
+                            confResetEnPassword.delete(0, END)
+                        else:
+                            if res["password"].lower() == resetData.password.lower():
+                                resetEnUsername.delete(0, END)
+                                resetEnPassword.delete(0, END)
+                                messagebox.showerror(title="Error", message="Your new password can't be the same as your old one.")
+                            else:
+                                filter = {"username":resetData.username}
+                                passw = {'$set':{"password":resetData.password}}
+                                collection.update_one(filter, passw)
+                                messagebox.showinfo(title="Success", message="Your password has been reset.")
+                                backToLogin()
+                else:
+                    resetEnUsername.delete(0, END)
+                    resetEnPassword.delete(0, END)
+                    confResetEnPassword.delete(0, END)
+                    messagebox.showerror(title="Error", message="Username is invalid.")
+            else:
+                messagebox.showerror(title="Error", message="Please enter all of entry.")
+    
+        def backToLogin():
+            btnBack.destroy()
+            resetusername.destroy()
+            resetEnUsername.destroy()
+            resetpassword.destroy()
+            resetEnPassword.destroy()
+            btnSubmit.destroy()
+            confResetpassword.destroy()
+            confResetEnPassword.destroy()
+            btnGoReg.destroy()
+            loginIspressed()
+            
+        def goReg():
+            btnBack.destroy()
+            resetusername.destroy()
+            resetEnUsername.destroy()
+            resetpassword.destroy()
+            resetEnPassword.destroy()
+            btnSubmit.destroy()
+            confResetpassword.destroy()
+            confResetEnPassword.destroy()
+            btnGoReg.destroy()
+            registerIspressed()
+        
+        
+        btnBack = customtkinter.CTkButton(
+            master= root,
+            text= "Go Back",
+            text_font="Courier 10",
+            text_color="white",
+            hover= True,
+            hover_color= "black",
+            height=40,
+            width= 120,
+            border_width=2,
+            corner_radius=3,
+            border_color= "black", 
+            bg_color="#262626",
+            fg_color= "#262626",
+            command = backToLogin
+        )
+        btnBack.place(relx=0.5, rely=0.75,anchor=customtkinter.CENTER)
+
+        resetusername = customtkinter.CTkLabel(
+            root,
+            text_font="Courier 12",
+            text = "USERNAME :",
+        )
+        resetusername.place(relx=0.2, rely=0.3)
+        
+        resetEnUsername = customtkinter.CTkEntry(
+            root)
+        resetEnUsername.place(relx=0.38, rely=0.3, relwidth=0.34, relheight=0.05)
+
+        resetpassword = customtkinter.CTkLabel(
+            root,
+            text_font="Courier 12",
+            text = "PASSWORD :",
+        )
+        resetpassword.place(relx=0.2, rely=0.37)
+        
+        resetEnPassword = customtkinter.CTkEntry(
+            root,
+            show = '*',
+            text_font="Courier 12",
+        )
+
+        resetEnPassword.place(relx=0.38, rely=0.37, relwidth=0.34, relheight=0.05)
+        
+        confResetpassword = customtkinter.CTkLabel(
+            root,
+            text_font="Courier 12",
+            text = "CONFIRM PASSWORD :",
+        )
+        confResetpassword.place(relx=0.1125, rely=0.44)
+
+        confResetEnPassword = customtkinter.CTkEntry(
+            root,
+            show = '*',
+            text_font="Courier 12",
+        )
+
+        confResetEnPassword.place(relx=0.38, rely=0.44, relwidth=0.34, relheight=0.05)
+
+        btnSubmit = customtkinter.CTkButton(
+            root,
+            text = "SUBMIT",
+            text_font="Courier 12 bold",
+            command = resetDestroy,
+        )
+        btnSubmit.place(relx=0.5, rely=0.57, anchor=customtkinter.CENTER)
+        
+        btnGoReg = customtkinter.CTkButton(
+            root,
+            text = "Don't have an account?",
+            text_font="Courier 12 bold",
+            command = goReg,
+        )
+        btnGoReg.place(relx=0.5, rely=0.65, anchor=customtkinter.CENTER) 
+    
+    def goback():
+        reset()
         loginmenu()
+        
+    resetPass = customtkinter.CTkButton(
+        master = root,
+        text = "Forgot Password?",
+        text_font="Courier 12 bold",
+        command = resetPassIspressed
+    )
+    # Clickable label will added in CustomTkinter Version 5.0.0
+    # resetPass = customtkinter.CTkLabel(
+    #     root,
+    #     text_font="Courier 10 underline",
+    #     text = "forgot password?",
+    #     cursor= "hand2"
+    # )
+    # resetPass.bind()
+    resetPass.place(relx=0.5, rely=0.57,anchor=customtkinter.CENTER)
+
     
     btnBack = customtkinter.CTkButton(
         master= root,
@@ -1298,8 +1511,10 @@ def loginIspressed():
         border_color= "black", 
         bg_color="#262626",
         fg_color= "#262626",
-        command = goback)
+        command = goback
+    )
     btnBack.place(relx=0.5, rely=0.75,anchor=customtkinter.CENTER)
+    
     logusername = customtkinter.CTkLabel(
         root,
         text_font="Courier 12",
@@ -1332,7 +1547,7 @@ def loginIspressed():
         text_font="Courier 12 bold",
         command = logindestroy,
     )
-    btnGoLogin.place(relx=0.5, rely=0.6, anchor=customtkinter.CENTER)
+    btnGoLogin.place(relx=0.5, rely=0.5, anchor=customtkinter.CENTER)
 
 def registerIspressed():
     def check_secure():
@@ -1411,6 +1626,16 @@ def registerIspressed():
         btnGoReg.destroy()
         btnBack.destroy()
         loginmenu()
+        
+    def goLog():
+        logusername.destroy()
+        RegEnUsername.destroy()
+        regpassword.destroy()
+        RegEnPassword.destroy()
+        btnGoLog.destroy()
+        btnGoReg.destroy()
+        btnBack.destroy()
+        loginIspressed()
     
     logusername = customtkinter.CTkLabel(
         root,
@@ -1445,7 +1670,15 @@ def registerIspressed():
         text_font="Courier 12 bold",
         command = registerdestroy,
     )
-    btnGoReg.place(relx=0.5, rely=0.6, anchor=customtkinter.CENTER)
+    btnGoReg.place(relx=0.5, rely=0.5, anchor=customtkinter.CENTER)
+    
+    btnGoLog = customtkinter.CTkButton(
+        master = root,
+        text = "Already have an account?",
+        text_font="Courier 12 bold",
+        command = goLog
+    )
+    btnGoLog.place(relx=0.5, rely=0.58,anchor=customtkinter.CENTER)
     
     btnBack = customtkinter.CTkButton(
         master= root,
@@ -1514,8 +1747,6 @@ def loginmenu():
         fg_color=("#262626"),
         text_font= ("Courier 16 bold"))
     wrong_score.place(relx=0.5, rely=0.55, relwidth=0.1, relheight=0.05, anchor=customtkinter.CENTER)
-
-
 
 loginmenu()
 root.mainloop()

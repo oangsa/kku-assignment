@@ -36,24 +36,45 @@
 # label.place(relx=0.280, rely=0.17)
 # root.mainloop()
 
-import threading
-import sched, time
+# import threading
+# import sched, time
 
-flag = True
+# flag = True
 
-def printit():
-    while(flag):
-        time.sleep(5)
-        print("Hello, world!")  
+# def printit():
+#     while(flag):
+#         time.sleep(5)
+#         print("Hello, world!")  
   
-t = threading.Thread(target=printit)
-t.start()
+# t = threading.Thread(target=printit)
+# t.start()
 
-x=25
+# x=25
 
-while x>1:
-    time.sleep(1)
-    print(x)
-    x=x-1 
+# while x>1:
+#     time.sleep(1)
+#     print(x)
+#     x=x-1 
 
-flag = False
+# flag = False
+
+from tkinter import *
+import webbrowser
+
+# Create an instance of tkinter frame
+win = Tk()
+win.geometry("700x350")
+
+def sayhello():
+    print("Hello")
+
+# Create a Label Widget
+label= Label(win, text= "Welcome to TutorialsPoint", cursor= "hand2", foreground= "green", font= ('Aerial 18 underline'))
+label.pack(pady= 30)
+
+# Define the URL to open
+# url= 'https://www.tutorialspoint.com/'
+
+# Bind the label with the URL to open in a new tab
+label.bind("<Button-1>", lambda _:sayhello())
+win.mainloop()
