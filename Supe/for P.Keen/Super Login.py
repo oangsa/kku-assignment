@@ -1,7 +1,6 @@
 import tkinter
-import tkinter.messagebox
 import customtkinter
-import string, tkinter, secrets
+import string, tkinter, secrets, time, threading
 import random as rd
 import math as m
 from pymongo import MongoClient
@@ -39,7 +38,41 @@ hd = score(0)
 def destroy():
     root.destroy()
 def easyStart():
+    global flag, t
+    progbar = customtkinter.CTkProgressBar(
+        master = root,
+        width = 500,
+        mode = "determinate",
+        progress_color = "#79ae61",
+        determinate_speed = 0.07
+    )
+    flag = True
+    def timer():
+        try:
+            while(flag):
+                time.sleep(0.1)
+                value = progbar.get()
+                value = "%.2f" % value
+                try:
+                    if 'normal' == root.state():
+                        if float(value) > 0.99:
+                            try_again()
+                    else:
+                        break
+                except RuntimeError:
+                    messagebox.showerror(title="Error", message="You tring to exit our game while playing the game :(")
+                    # print("You tring to exit this program while playing this game.")
+                    exit()
+        except KeyboardInterrupt:
+            print("You tring to interrupt this program.")
+            exit()
+
+    
+    t = threading.Thread(target=timer)
+
     def goback():
+        global flag
+        flag = False
         if regis.reg == 1:
             filter = {"username":regData.username.lower()}
             high_scores = {'$set':{"highest_scores":ez.score}}
@@ -62,6 +95,7 @@ def easyStart():
             collection.update_one(filter, current_scores)
         solving.delete(0,END)
         correct.destroy()
+        progbar.destroy()
         wrong.destroy()
         wrong_score.destroy()
         newQ.destroy()
@@ -70,6 +104,7 @@ def easyStart():
         solving.destroy()
         submit.destroy()
         btnBack.destroy()
+        scoreText.destroy()
         menu()
         ez.score = 0
 
@@ -100,6 +135,9 @@ def easyStart():
                 fg_color=("#262626"),
                 text_font= ("Courier 16 bold"))
             wrong_score.place(relx=0.5, rely=0.305, anchor=customtkinter.CENTER)
+            scoreText.configure(text_color = "#c75d55")
+            progbar.configure(progress_color = "#c75d55")
+            progbar.stop()
             if regis.reg == 1:
                 filter = {"username":regData.username.lower()}
                 high_scores = {'$set':{"highest_scores":ez.score}}
@@ -126,6 +164,7 @@ def easyStart():
     def try_again():
         global newQ
         newQ.destroy()
+        correct.destroy()
         solving.delete(0,END)
         try_again.num1update = rd.randint(0,999)
         try_again.num2update = rd.randint(0,999)
@@ -184,8 +223,20 @@ def easyStart():
                 text_font= ("Courier 16 bold")
             )
             newQ.place(relx=0.5, rely=0.25, relwidth=0.7, relheight=0.23, anchor=customtkinter.CENTER)
-
-
+        progbar.set(0,100)
+        scoreText.configure(text=f"Total Score(s): {ez.score}")
+    
+    def start():
+        try_again()
+        btnBack.destroy()
+        progbar.place(relx=0.5, rely=0.04,anchor=customtkinter.CENTER)
+        submit.place(relx=0.5, rely=0.6, relwidth=0.24, relheight=0.13, anchor=customtkinter.CENTER)
+        scoreText.configure(text=f"Total Score(s): {ez.score}")
+        progbar.set(0,100)
+        progbar.start()
+        t.start()
+        
+ 
     def resultPLUS():
         try_again
         return try_again.ans
@@ -193,6 +244,15 @@ def easyStart():
     def delete():
         solving.delete(1)
 
+    scoreText = customtkinter.CTkLabel(
+        master=root,
+        text = "",
+        text_font= ("Courier 18 bold"),
+        text_color='#79ae61'
+    )
+    scoreText.place(relx=0.5, rely=0.75, anchor=customtkinter.CENTER)
+    
+    
     easytext = customtkinter.CTkLabel(
         master=root,
         text = "EASY MODE",
@@ -204,7 +264,7 @@ def easyStart():
         master=root,
         text = "Start",
         text_font= ("Courier 16 bold"),
-        command = try_again)
+        command = start)
     start.place(relx=0.5, rely=0.25, anchor=customtkinter.CENTER)
 
     solving = customtkinter.CTkEntry(
@@ -218,7 +278,7 @@ def easyStart():
         text = "Submit",
         text_font= ("Courier 16 bold"),
         command=lambda: submt(solving))
-    submit.place(relx=0.5, rely=0.6, relwidth=0.24, relheight=0.13, anchor=customtkinter.CENTER)
+    
 
     btnBack = customtkinter.CTkButton(
         master= root,
@@ -237,17 +297,43 @@ def easyStart():
         command = goback)
     btnBack.place(relx=0.5, rely=0.75,anchor=customtkinter.CENTER)
 
-    # try_again = Button(
-    #     root,
-    #     text = "Try Again",
-    #     font = ("Courier", 16),
-    #     command = try_again
-    # )
-    # try_again.place(relx=0.42, rely=0.9)
-
 def normalStart():
-    global try_again
+    global flag, t
+    progbar = customtkinter.CTkProgressBar(
+        master = root,
+        width = 500,
+        mode = "determinate",
+        progress_color= "#eda850",
+        determinate_speed = 0.07
+    )
+    flag = True
+    def timer():
+        try:
+            while(flag):
+                time.sleep(0.1)
+                value = progbar.get()
+                value = "%.2f" % value
+                # print(value)
+                try:
+                    if 'normal' == root.state():
+                        if float(value) > 0.99:
+                            try_again()
+                    else:
+                        break
+                except RuntimeError:
+                    messagebox.showerror(title="Error", message="You tring to exit our game while playing the game :(")
+                    # print("You tring to exit this program while playing this game.")
+                    exit()
+        except KeyboardInterrupt:
+            print("You tring to interrupt this program.")
+            exit()
+    
+
+    t = threading.Thread(target=timer)
+    
     def goback():
+        global flag
+        flag = False
         if regis.reg == 1:
             filter = {"username":regData.username.lower()}
             high_scores = {'$set':{"highest_scores":nm.score}}
@@ -278,6 +364,8 @@ def normalStart():
         solving.destroy()
         submit.destroy()
         btnBack.destroy()
+        progbar.destroy()
+        scoreText.destroy()
         menu()
         nm.score = 0
 
@@ -308,6 +396,9 @@ def normalStart():
                 fg_color=("#262626"),
                 text_font= ("Courier 16 bold"))
             wrong_score.place(relx=0.5, rely=0.305, anchor=customtkinter.CENTER)
+            scoreText.configure(text_color = "#c75d55")
+            progbar.configure(progress_color = "#c75d55")
+            progbar.stop()
             if regis.reg == 1:
                 filter = {"username":regData.username.lower()}
                 high_scores = {'$set':{"highest_scores":nm.score}}
@@ -331,11 +422,10 @@ def normalStart():
                 collection.update_one(filter, current_scores)
                 root.after(3000, goback)
             
-
-
     def try_again():
         global newQ
         newQ.destroy()
+        correct.destroy()
         solving.delete(0,END)
         try_again.num1update = rd.randint(0,99999)
         try_again.num2update = rd.randint(0,99999)
@@ -409,7 +499,8 @@ def normalStart():
                 text_font= ("Courier 16 bold")
             )
             newQ.place(relx=0.5, rely=0.25, relwidth=0.7, relheight=0.23, anchor=customtkinter.CENTER)
-
+        progbar.set(0,100)
+        scoreText.configure(text = f"Total Score(s): {nm.score}")
 
     def resultPLUS():
         try_again
@@ -417,6 +508,24 @@ def normalStart():
 
     def delete():
         solving.delete(1)
+        
+    def start():
+        try_again()
+        btnBack.destroy()
+        progbar.place(relx=0.5, rely=0.04,anchor=customtkinter.CENTER)
+        submit.place(relx=0.5, rely=0.6, relwidth=0.24, relheight=0.13, anchor=customtkinter.CENTER)
+        scoreText.configure(text = f"Total Score(s): 0")
+        progbar.set(0,100)
+        progbar.start()
+        t.start()
+
+    scoreText = customtkinter.CTkLabel(
+        master=root,
+        text = "",
+        text_font= ("Courier 18 bold"),
+        text_color='#79ae61'
+    )
+    scoreText.place(relx=0.5, rely=0.75, anchor=customtkinter.CENTER)
 
     normaltext = customtkinter.CTkLabel(
         master=root,
@@ -429,7 +538,7 @@ def normalStart():
         master=root,
         text = "Start",
         text_font= ("Courier 16 bold"),
-        command = try_again)
+        command = start)
     start.place(relx=0.5, rely=0.25, anchor=customtkinter.CENTER)
 
     solving = customtkinter.CTkEntry(
@@ -443,7 +552,6 @@ def normalStart():
         text = "Submit",
         text_font= ("Courier 16 bold"),
         command=lambda: submt(solving))
-    submit.place(relx=0.5, rely=0.6, relwidth=0.24, relheight=0.13, anchor=customtkinter.CENTER)
 
     btnBack = customtkinter.CTkButton(
         master= root,
@@ -462,17 +570,43 @@ def normalStart():
         command = goback)
     btnBack.place(relx=0.5, rely=0.75,anchor=customtkinter.CENTER)
 
-    # try_again = Button(
-    #     root,
-    #     text = "Try Again",
-    #     font = ("Courier", 16),
-    #     command = try_again)
-    # try_again.place(relx=0.42, rely=0.9)
-
-
 def hardStart():
-    global try_again
+    global flag, t
+    progbar = customtkinter.CTkProgressBar(
+        master = root,
+        width = 500,
+        mode = "determinate",
+        progress_color= "#FFA500",
+        determinate_speed = 0.07
+    )
+    flag = True
+    def timer():
+        try:
+            while(flag):
+                time.sleep(0.1)
+                value = progbar.get()
+                value = "%.2f" % value
+                # print(value)
+                try:
+                    if 'normal' == root.state():
+                        if float(value) > 0.99:
+                            try_again()
+                    else:
+                        break
+                except RuntimeError:
+                    messagebox.showerror(title="Error", message="You tring to exit our game while playing the game :(")
+                    # print("You tring to exit this program while playing this game.")
+                    exit()
+        except KeyboardInterrupt:
+            print("You tring to interrupt this program.")
+            exit()
+
+
+    t = threading.Thread(target=timer)
+
     def goback():
+        global flag
+        flag = False
         if regis.reg == 1:
             filter = {"username":regData.username.lower()}
             high_scores = {'$set':{"highest_scores":hd.score}}
@@ -503,6 +637,8 @@ def hardStart():
         solving.destroy()
         submit.destroy()
         btnBack.destroy()
+        progbar.destroy()
+        scoreText.destroy()
         menu()
         hd.score = 0
 
@@ -518,6 +654,7 @@ def hardStart():
             correct.place(relx=0.5, rely=0.17, anchor=customtkinter.CENTER)
             hd.score += 3
             root.after(500, try_again)
+            progbar.set(0,100)
         else:
             wrong = customtkinter.CTkLabel(
                 root,
@@ -533,6 +670,9 @@ def hardStart():
                 fg_color=("#262626"),
                 text_font= ("Courier 16 bold"))
             wrong_score.place(relx=0.5, rely=0.305, anchor=customtkinter.CENTER)
+            progbar.configure(progress_color = "#c75d55")
+            scoreText.configure(text_color = "#c75d55")
+            progbar.stop()
             if regis.reg == 1:
                 filter = {'username':regData.username.lower()}
                 high_scores = {'$set':{"highest_scores":hd.score}}
@@ -560,6 +700,7 @@ def hardStart():
     def try_again():
         global newQ
         newQ.destroy()
+        correct.destroy()
         solving.delete(0,END)
         try_again.num1update = rd.randint(0,9999999)
         try_again.num2update = rd.randint(0,9999999)
@@ -644,6 +785,8 @@ def hardStart():
                 text_font= ("Courier 16 bold")
             )
             newQ.place(relx=0.5, rely=0.25, relwidth=0.7, relheight=0.23, anchor=customtkinter.CENTER)
+        scoreText.configure(text=f"Total Score(s): {hd.score}")
+        progbar.set(0,100)
 
     def resultPLUS():
         try_again
@@ -651,6 +794,25 @@ def hardStart():
 
     def delete():
         solving.delete(1)
+
+    def start():
+        try_again()
+        btnBack.destroy()
+        progbar.place(relx=0.5, rely=0.04,anchor=customtkinter.CENTER)
+        submit.place(relx=0.5, rely=0.6, relwidth=0.24, relheight=0.13, anchor=customtkinter.CENTER)
+        scoreText.configure(text=f"Total Score(s): 0")
+        progbar.set(0,100)
+        progbar.start()
+        t.start()
+        
+    scoreText = customtkinter.CTkLabel(
+        master=root,
+        text = "",
+        text_font= ("Courier 18 bold"),
+        text_color='#79ae61'
+    )
+    scoreText.place(relx=0.5, rely=0.75, anchor=customtkinter.CENTER)
+
 
     hardtext = customtkinter.CTkLabel(
         master=root,
@@ -663,7 +825,7 @@ def hardStart():
         master=root,
         text = "Start",
         text_font= ("Courier 16 bold"),
-        command = try_again)
+        command = start)
     start.place(relx=0.5, rely=0.25, anchor=customtkinter.CENTER)
 
     solving = customtkinter.CTkEntry(
@@ -677,7 +839,6 @@ def hardStart():
         text = "Submit",
         text_font= ("Courier 16 bold"),
         command=lambda: submt(solving))
-    submit.place(relx=0.5, rely=0.6, relwidth=0.24, relheight=0.13, anchor=customtkinter.CENTER)
 
     btnBack = customtkinter.CTkButton(
         master= root,
@@ -695,14 +856,7 @@ def hardStart():
         fg_color= "#262626",
         command = goback)
     btnBack.place(relx=0.5, rely=0.75,anchor=customtkinter.CENTER)
-'''
-    try_again = Button(
-        root,
-        text = "Try Again",
-        font = ("Courier", 16),
-        command = try_again)
-    try_again.place(relx=0.42, rely=0.9)
-'''
+
 
 def leaderStart():
 
@@ -797,7 +951,80 @@ def leaderStart():
         command = goback)
     btnBack.place(relx=0.5, rely=0.7,anchor=customtkinter.CENTER)
 
+def settingStart():
+    
+    def reset():
+        leadtext.destroy()
+        btnBack.destroy()
+        selectThemesLabel.destroy()
+        themesMenu.destroy()
+        # selectAppearanceLabel.destroy()
+        # appearanceMenu.destroy()
+    
+    def goback():
+        reset()
+        menu()
+    
+    def default_color_theme(new_default_color_theme):
+        customtkinter.set_default_color_theme(new_default_color_theme)
+        reset()
+        settingStart()
+    
+    def appearance_mode(new_appearance_mode):
+        customtkinter.set_appearance_mode(new_appearance_mode)
+    
+    leadtext = customtkinter.CTkLabel(
+        root,
+        text = "SETTINGS",
+        text_font= ("Courier 30 bold"),
+        text_color='#ADD8E6'
+    )
+    leadtext.pack(pady=(30,30))
 
+    selectThemesLabel = customtkinter.CTkLabel(
+        master = root, 
+        text = "Color Themes:",
+        text_color="white",
+    )
+    selectThemesLabel.place(relx=0.5, rely=0.19,anchor=customtkinter.CENTER)
+    
+    themesMenu = customtkinter.CTkOptionMenu(
+        master = root,
+        values=["blue", "green", "dark-blue"],
+        command= default_color_theme
+    )
+    themesMenu.place(relx=0.5, rely=0.24,anchor=customtkinter.CENTER)
+    
+    # selectAppearanceLabel = customtkinter.CTkLabel(
+    #     master = root, 
+    #     text = "Appearance Modes:",
+    #     text_color="white",
+    # )
+    # selectAppearanceLabel.place(relx=0.5, rely=0.32,anchor=customtkinter.CENTER)
+    
+    # appearanceMenu = customtkinter.CTkOptionMenu(
+    #     master = root,
+    #     values=["System", "Dark", "Light"],
+    #     command= appearance_mode
+    # )
+    # appearanceMenu.place(relx=0.5, rely=0.37,anchor=customtkinter.CENTER)
+    
+    btnBack = customtkinter.CTkButton(
+        master= root,
+        text= "Go Back",
+        text_font="Courier 10",
+        text_color="white",
+        hover= True,
+        hover_color= "black",
+        height=40,
+        width= 120,
+        border_width=2,
+        corner_radius=3,
+        border_color= "black", 
+        bg_color="#262626",
+        fg_color= "#262626",
+        command = goback)
+    btnBack.place(relx=0.5, rely=0.7,anchor=customtkinter.CENTER)
 
 root = customtkinter.CTk()
 root.title("Super Quiz")
@@ -815,6 +1042,7 @@ def menu():
         btnStartLeader.destroy()
         btnLogout.destroy()
         lblrule.destroy()
+        btnStartSetting.destroy()
         easyStart()
 
     def normalIspressed():
@@ -826,6 +1054,7 @@ def menu():
         btnStartLeader.destroy()
         btnLogout.destroy()
         lblrule.destroy()
+        btnStartSetting.destroy()
         normalStart()
 
     def hardIspressed():
@@ -837,6 +1066,7 @@ def menu():
         btnStartLeader.destroy()
         btnLogout.destroy()
         lblrule.destroy()
+        btnStartSetting.destroy()
         hardStart()
 
     def leaderIspressed():
@@ -848,6 +1078,7 @@ def menu():
         btnStartLeader.destroy()
         btnLogout.destroy()
         lblrule.destroy()
+        btnStartSetting.destroy()
         leaderStart()
 
     def logoutIspressed():
@@ -859,7 +1090,34 @@ def menu():
         btnStartLeader.destroy()
         btnLogout.destroy()
         lblrule.destroy()
+        btnStartSetting.destroy()
         loginmenu()
+        
+    def settingIspressed():
+        labeltext.destroy()
+        btnStartEasy.destroy()
+        btnStartNormal.destroy()
+        btnStartHard.destroy()
+        lblInstruction.destroy()
+        btnStartLeader.destroy()
+        btnLogout.destroy()
+        lblrule.destroy()
+        btnStartSetting.destroy()
+        settingStart()
+        
+    def resetPassIspressed():
+        labeltext.destroy()
+        btnStartEasy.destroy()
+        btnStartNormal.destroy()
+        btnStartHard.destroy()
+        lblInstruction.destroy()
+        btnStartLeader.destroy()
+        btnLogout.destroy()
+        lblrule.destroy()
+        btnStartSetting.destroy()
+        settingStart()
+
+
 
     labeltext = customtkinter.CTkLabel(
         root,
@@ -922,6 +1180,23 @@ def menu():
         command = hardIspressed)
 
     btnStartHard.pack(pady=(10,0))
+    
+    btnStartSetting = customtkinter.CTkButton(
+        master= root,
+        text= "SETTINGS",
+        text_font="none 10",
+        text_color="white",
+        hover= True,
+        hover_color= "#ADD8E6",
+        height=40,
+        width= 120,
+        border_width=2,
+        corner_radius=3,
+        border_color= "#ADD8E6", 
+        bg_color="#262626",
+        fg_color= "#262626",
+        command = settingIspressed)
+    btnStartSetting.pack(pady=(10,0))
 
     btnStartLeader = customtkinter.CTkButton(
         master= root,
@@ -938,7 +1213,8 @@ def menu():
         bg_color="#262626",
         fg_color= "#262626",
         command = leaderIspressed)
-    btnStartLeader.pack(pady=(10,50))
+    btnStartLeader.pack(pady=(10,40))
+    
 
     lblInstruction = customtkinter.CTkLabel(
         root,
@@ -997,11 +1273,7 @@ def loginIspressed():
                 logEnPassword.delete(0, END)
         
         if checklog_secure() == True:
-            logusername.destroy()
-            logEnUsername.destroy()
-            logpassword.destroy()
-            logEnPassword.destroy()
-            btnGoLogin.destroy()
+            reset()
             # messagebox.showinfo(title="Success", message="Loggedin Success!")
             menu()
 
@@ -1011,6 +1283,238 @@ def loginIspressed():
     correct.destroy()
     wrong.destroy()
     wrong_score.destroy()
+    
+    
+    def reset():
+        logusername.destroy()
+        logEnUsername.destroy()
+        logpassword.destroy()
+        logEnPassword.destroy()
+        btnGoLogin.destroy()
+        btnBack.destroy()
+        resetPass.destroy()
+    
+    
+    def resetPassIspressed():
+        reset()
+        
+        def check_secure():
+            password = resetEnPassword.get()
+            confpass = confResetEnPassword.get()
+            secure_pass = True
+            lower_case = any([1 if c in string.ascii_lowercase else 0 for c in password])
+            upper_case = any([1 if c in string.ascii_uppercase else 0 for c in password])
+            number = any([1 if c in string.digits else 0 for c in password])
+            if password != confpass:
+                messagebox.showerror(title="Error", message="Password isnt match.")
+                confResetEnPassword.delete(0, END)
+                secure_pass = False
+                return secure_pass
+                
+            if len(password) < 6:
+                messagebox.showerror(title="Error", message="Password must be at least 6 characters long.")
+                resetEnPassword.delete(0, END)
+                confResetEnPassword.delete(0, END)
+                secure_pass = False
+                return secure_pass
+
+            if number == False:
+                messagebox.showerror(title="Error", message="Password must be contain at least 1 number.")
+                resetEnPassword.delete(0, END)
+                confResetEnPassword.delete(0, END)
+                secure_pass = False
+                return secure_pass
+
+            if lower_case == False:
+                messagebox.showerror(title="Error", message="Password must be contain at least 1 character.")
+                resetEnPassword.delete(0, END)
+                confResetEnPassword.delete(0, END)
+                secure_pass = False
+                return secure_pass
+
+            if upper_case == False:
+                messagebox.showerror(title="Error", message="Password must be contain at least 1 upper character.")
+                resetEnPassword.delete(0, END)
+                confResetEnPassword.delete(0, END)
+                secure_pass = False
+                return secure_pass
+            secure_pass = True
+            return secure_pass
+            
+        class reset_user:
+            def __init__(self, username, password, confpassword):
+                self.username = username
+                self.password = password
+                self.confpassword = confpassword       
+        def resetDestroy():
+            resetData = reset_user(resetEnUsername.get().lower(), resetEnPassword.get(), confResetEnPassword.get())
+            res = collection.find_one({"username":resetData.username})
+            if resetData.username != "" and resetData.password != "" and resetData.confpassword != "":
+                if collection.find_one({"username":resetData.username}):
+                    if check_secure() == True:
+                        if resetData.username == "":
+                            messagebox.showerror(title="Error", message="Username is invalid.")
+                            resetEnUsername.delete(0, END)
+                            resetEnPassword.delete(0, END)
+                            confResetEnPassword.delete(0, END)
+                        else:
+                            if res["password"].lower() == resetData.password.lower():
+                                resetEnUsername.delete(0, END)
+                                resetEnPassword.delete(0, END)
+                                messagebox.showerror(title="Error", message="Your new password can't be the same as your old one.")
+                            else:
+                                filter = {"username":resetData.username}
+                                passw = {'$set':{"password":resetData.password}}
+                                collection.update_one(filter, passw)
+                                messagebox.showinfo(title="Success", message="Your password has been reset.")
+                                backToLogin()
+                else:
+                    resetEnUsername.delete(0, END)
+                    resetEnPassword.delete(0, END)
+                    confResetEnPassword.delete(0, END)
+                    messagebox.showerror(title="Error", message="Username is invalid.")
+            else:
+                messagebox.showerror(title="Error", message="Please enter all of entry.")
+    
+        def backToLogin():
+            btnBack.destroy()
+            resetusername.destroy()
+            resetEnUsername.destroy()
+            resetpassword.destroy()
+            resetEnPassword.destroy()
+            btnSubmit.destroy()
+            confResetpassword.destroy()
+            confResetEnPassword.destroy()
+            btnGoReg.destroy()
+            loginIspressed()
+            
+        def goReg():
+            btnBack.destroy()
+            resetusername.destroy()
+            resetEnUsername.destroy()
+            resetpassword.destroy()
+            resetEnPassword.destroy()
+            btnSubmit.destroy()
+            confResetpassword.destroy()
+            confResetEnPassword.destroy()
+            btnGoReg.destroy()
+            registerIspressed()
+        
+        
+        btnBack = customtkinter.CTkButton(
+            master= root,
+            text= "Go Back",
+            text_font="Courier 10",
+            text_color="white",
+            hover= True,
+            hover_color= "black",
+            height=40,
+            width= 120,
+            border_width=2,
+            corner_radius=3,
+            border_color= "black", 
+            bg_color="#262626",
+            fg_color= "#262626",
+            command = backToLogin
+        )
+        btnBack.place(relx=0.5, rely=0.75,anchor=customtkinter.CENTER)
+
+        resetusername = customtkinter.CTkLabel(
+            root,
+            text_font="Courier 12",
+            text = "USERNAME :",
+        )
+        resetusername.place(relx=0.2, rely=0.3)
+        
+        resetEnUsername = customtkinter.CTkEntry(
+            root)
+        resetEnUsername.place(relx=0.38, rely=0.3, relwidth=0.34, relheight=0.05)
+
+        resetpassword = customtkinter.CTkLabel(
+            root,
+            text_font="Courier 12",
+            text = "PASSWORD :",
+        )
+        resetpassword.place(relx=0.2, rely=0.37)
+        
+        resetEnPassword = customtkinter.CTkEntry(
+            root,
+            show = '*',
+            text_font="Courier 12",
+        )
+
+        resetEnPassword.place(relx=0.38, rely=0.37, relwidth=0.34, relheight=0.05)
+        
+        confResetpassword = customtkinter.CTkLabel(
+            root,
+            text_font="Courier 12",
+            text = "CONFIRM PASSWORD :",
+        )
+        confResetpassword.place(relx=0.1125, rely=0.44)
+
+        confResetEnPassword = customtkinter.CTkEntry(
+            root,
+            show = '*',
+            text_font="Courier 12",
+        )
+
+        confResetEnPassword.place(relx=0.38, rely=0.44, relwidth=0.34, relheight=0.05)
+
+        btnSubmit = customtkinter.CTkButton(
+            root,
+            text = "SUBMIT",
+            text_font="Courier 12 bold",
+            command = resetDestroy,
+        )
+        btnSubmit.place(relx=0.5, rely=0.57, anchor=customtkinter.CENTER)
+        
+        btnGoReg = customtkinter.CTkButton(
+            root,
+            text = "Don't have an account?",
+            text_font="Courier 12 bold",
+            command = goReg,
+        )
+        btnGoReg.place(relx=0.5, rely=0.65, anchor=customtkinter.CENTER) 
+    
+    def goback():
+        reset()
+        loginmenu()
+        
+    resetPass = customtkinter.CTkButton(
+        master = root,
+        text = "Forgot Password?",
+        text_font="Courier 12 bold",
+        command = resetPassIspressed
+    )
+    # Clickable label will added in CustomTkinter Version 5.0.0
+    # resetPass = customtkinter.CTkLabel(
+    #     root,
+    #     text_font="Courier 10 underline",
+    #     text = "forgot password?",
+    #     cursor= "hand2"
+    # )
+    # resetPass.bind()
+    resetPass.place(relx=0.5, rely=0.57,anchor=customtkinter.CENTER)
+
+    
+    btnBack = customtkinter.CTkButton(
+        master= root,
+        text= "Go Back",
+        text_font="Courier 10",
+        text_color="white",
+        hover= True,
+        hover_color= "black",
+        height=40,
+        width= 120,
+        border_width=2,
+        corner_radius=3,
+        border_color= "black", 
+        bg_color="#262626",
+        fg_color= "#262626",
+        command = goback
+    )
+    btnBack.place(relx=0.5, rely=0.75,anchor=customtkinter.CENTER)
+    
     logusername = customtkinter.CTkLabel(
         root,
         text_font="Courier 12",
@@ -1043,7 +1547,7 @@ def loginIspressed():
         text_font="Courier 12 bold",
         command = logindestroy,
     )
-    btnGoLogin.place(relx=0.5, rely=0.6, anchor=customtkinter.CENTER)
+    btnGoLogin.place(relx=0.5, rely=0.5, anchor=customtkinter.CENTER)
 
 def registerIspressed():
     def check_secure():
@@ -1099,6 +1603,7 @@ def registerIspressed():
                         regpassword.destroy()
                         RegEnPassword.destroy()
                         btnGoReg.destroy()
+                        btnBack.destroy()
                         messagebox.showinfo(title="Success", message="Registered success!")
                         menu()
         else:
@@ -1111,6 +1616,27 @@ def registerIspressed():
     correct.destroy()
     wrong.destroy()
     wrong_score.destroy()
+    
+    
+    def goback():
+        logusername.destroy()
+        RegEnUsername.destroy()
+        regpassword.destroy()
+        RegEnPassword.destroy()
+        btnGoReg.destroy()
+        btnBack.destroy()
+        loginmenu()
+        
+    def goLog():
+        logusername.destroy()
+        RegEnUsername.destroy()
+        regpassword.destroy()
+        RegEnPassword.destroy()
+        btnGoLog.destroy()
+        btnGoReg.destroy()
+        btnBack.destroy()
+        loginIspressed()
+    
     logusername = customtkinter.CTkLabel(
         root,
         text_font="Courier 12",
@@ -1144,7 +1670,32 @@ def registerIspressed():
         text_font="Courier 12 bold",
         command = registerdestroy,
     )
-    btnGoReg.place(relx=0.5, rely=0.6, anchor=customtkinter.CENTER)
+    btnGoReg.place(relx=0.5, rely=0.5, anchor=customtkinter.CENTER)
+    
+    btnGoLog = customtkinter.CTkButton(
+        master = root,
+        text = "Already have an account?",
+        text_font="Courier 12 bold",
+        command = goLog
+    )
+    btnGoLog.place(relx=0.5, rely=0.58,anchor=customtkinter.CENTER)
+    
+    btnBack = customtkinter.CTkButton(
+        master= root,
+        text= "Go Back",
+        text_font="Courier 10",
+        text_color="white",
+        hover= True,
+        hover_color= "black",
+        height=40,
+        width= 120,
+        border_width=2,
+        corner_radius=3,
+        border_color= "black", 
+        bg_color="#262626",
+        fg_color= "#262626",
+        command = goback)
+    btnBack.place(relx=0.5, rely=0.75,anchor=customtkinter.CENTER)
 
 def loginmenu():
     global btnLogin, btnRegister, newQ, correct, wrong, wrong_score
@@ -1196,8 +1747,6 @@ def loginmenu():
         fg_color=("#262626"),
         text_font= ("Courier 16 bold"))
     wrong_score.place(relx=0.5, rely=0.55, relwidth=0.1, relheight=0.05, anchor=customtkinter.CENTER)
-
-
 
 loginmenu()
 root.mainloop()
