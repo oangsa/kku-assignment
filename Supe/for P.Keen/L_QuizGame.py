@@ -7,8 +7,8 @@ from pymongo import MongoClient
 from tkinter import *
 from tkinter import messagebox
 
-customtkinter.set_appearance_mode("default")  # Modes: system (default), light, dark
-customtkinter.set_default_color_theme("green")  # Themes: blue (default), dark-blue, green
+customtkinter.set_appearance_mode("dark")
+customtkinter.set_default_color_theme("green")
 
 url = "mongodb+srv://oangsa:oangsa58528@miniproject.c9yxi6i.mongodb.net/?retryWrites=true&w=majority"
 cluster = MongoClient(url)
@@ -868,7 +868,6 @@ def leaderStart():
         btnBack.destroy()
         score.destroy()
         menu()
-    
 
     if regis.reg == 1:
         leadres = collection.find_one({"username":regData.username.lower()})
@@ -888,7 +887,7 @@ def leaderStart():
     leadtext = customtkinter.CTkLabel(
         root,
         text = "LEADERBOARD",
-        text_font= ("Courier 30 bold"),
+        text_font= ("Courier 30 bold underline"),
         text_color='#eda850'
     )
     leadtext.pack(pady=(60,30))
@@ -922,7 +921,7 @@ def leaderStart():
         text_font= ("Courier 20 bold"),
         text_color='white',
         fg_color=("#262626"),
-        corner_radius=6)
+        corner_radius=5)
     userb.place(relx=0.2, rely=0.28)
 
     scoreb = customtkinter.CTkLabel(
@@ -931,7 +930,7 @@ def leaderStart():
         text_font= ("Courier 20 bold"),
         text_color='white',
         fg_color=("#262626"),
-        corner_radius=6)
+        corner_radius=5)
     scoreb.place(relx=0.6, rely=0.28)
 
     btnBack = customtkinter.CTkButton(
@@ -976,7 +975,7 @@ def settingStart():
     leadtext = customtkinter.CTkLabel(
         root,
         text = "SETTINGS",
-        text_font= ("Courier 30 bold"),
+        text_font= ("Courier 30 bold underline"),
         text_color='#ADD8E6'
     )
     leadtext.pack(pady=(30,30))
@@ -1033,7 +1032,8 @@ root.resizable(0,0)
 
 def menu():
     global easy,normal,hard
-    def easyIspressed():
+    
+    def destroyMenu():
         labeltext.destroy()
         btnStartEasy.destroy()
         btnStartNormal.destroy()
@@ -1043,81 +1043,30 @@ def menu():
         btnLogout.destroy()
         lblrule.destroy()
         btnStartSetting.destroy()
+    
+    def easyIspressed():
+        destroyMenu()
         easyStart()
 
     def normalIspressed():
-        labeltext.destroy()
-        btnStartEasy.destroy()
-        btnStartNormal.destroy()
-        btnStartHard.destroy()
-        lblInstruction.destroy()
-        btnStartLeader.destroy()
-        btnLogout.destroy()
-        lblrule.destroy()
-        btnStartSetting.destroy()
+        destroyMenu()
         normalStart()
 
     def hardIspressed():
-        labeltext.destroy()
-        btnStartEasy.destroy()
-        btnStartNormal.destroy()
-        btnStartHard.destroy()
-        lblInstruction.destroy()
-        btnStartLeader.destroy()
-        btnLogout.destroy()
-        lblrule.destroy()
-        btnStartSetting.destroy()
+        destroyMenu()
         hardStart()
 
     def leaderIspressed():
-        labeltext.destroy()
-        btnStartEasy.destroy()
-        btnStartNormal.destroy()
-        btnStartHard.destroy()
-        lblInstruction.destroy()
-        btnStartLeader.destroy()
-        btnLogout.destroy()
-        lblrule.destroy()
-        btnStartSetting.destroy()
+        destroyMenu()
         leaderStart()
 
     def logoutIspressed():
-        labeltext.destroy()
-        btnStartEasy.destroy()
-        btnStartNormal.destroy()
-        btnStartHard.destroy()
-        lblInstruction.destroy()
-        btnStartLeader.destroy()
-        btnLogout.destroy()
-        lblrule.destroy()
-        btnStartSetting.destroy()
+        destroyMenu()
         loginmenu()
         
     def settingIspressed():
-        labeltext.destroy()
-        btnStartEasy.destroy()
-        btnStartNormal.destroy()
-        btnStartHard.destroy()
-        lblInstruction.destroy()
-        btnStartLeader.destroy()
-        btnLogout.destroy()
-        lblrule.destroy()
-        btnStartSetting.destroy()
+        destroyMenu()
         settingStart()
-        
-    def resetPassIspressed():
-        labeltext.destroy()
-        btnStartEasy.destroy()
-        btnStartNormal.destroy()
-        btnStartHard.destroy()
-        lblInstruction.destroy()
-        btnStartLeader.destroy()
-        btnLogout.destroy()
-        lblrule.destroy()
-        btnStartSetting.destroy()
-        settingStart()
-
-
 
     labeltext = customtkinter.CTkLabel(
         root,
@@ -1274,16 +1223,12 @@ def loginIspressed():
         
         if checklog_secure() == True:
             reset()
-            # messagebox.showinfo(title="Success", message="Loggedin Success!")
             menu()
 
     btnLogin.destroy()
     btnRegister.destroy()
-    newQ.destroy()
-    correct.destroy()
-    wrong.destroy()
-    wrong_score.destroy()
-    
+    btnCredit.destroy()
+    nameLabel.destroy()
     
     def reset():
         logusername.destroy()
@@ -1297,7 +1242,6 @@ def loginIspressed():
     
     def resetPassIspressed():
         reset()
-        
         def check_secure():
             password = resetEnPassword.get()
             confpass = confResetEnPassword.get()
@@ -1375,8 +1319,8 @@ def loginIspressed():
                     messagebox.showerror(title="Error", message="Username is invalid.")
             else:
                 messagebox.showerror(title="Error", message="Please enter all of entry.")
-    
-        def backToLogin():
+
+        def resetPassreset():
             btnBack.destroy()
             resetusername.destroy()
             resetEnUsername.destroy()
@@ -1386,18 +1330,14 @@ def loginIspressed():
             confResetpassword.destroy()
             confResetEnPassword.destroy()
             btnGoReg.destroy()
+        
+        
+        def backToLogin():
+            resetPassreset()
             loginIspressed()
             
         def goReg():
-            btnBack.destroy()
-            resetusername.destroy()
-            resetEnUsername.destroy()
-            resetpassword.destroy()
-            resetEnPassword.destroy()
-            btnSubmit.destroy()
-            confResetpassword.destroy()
-            confResetEnPassword.destroy()
-            btnGoReg.destroy()
+            resetPassreset()
             registerIspressed()
         
         
@@ -1552,10 +1492,17 @@ def loginIspressed():
 def registerIspressed():
     def check_secure():
         password = RegEnPassword.get()
+        username = RegEnUsername.get()
         secure_pass = True
         lower_case = any([1 if c in string.ascii_lowercase else 0 for c in password])
         upper_case = any([1 if c in string.ascii_uppercase else 0 for c in password])
-        number = any([1 if c in string.digits else 0 for c in password])        
+        number = any([1 if c in string.digits else 0 for c in password])
+        
+        if len(username) > 6:
+            messagebox.showerror(title="Error", message="Username can't be greater than 7 characters long.")
+            secure_pass = False
+            return secure_pass
+                
         if len(password) < 6:
             messagebox.showerror(title="Error", message="Password must be at least 6 characters long.")
             secure_pass = False
@@ -1598,43 +1545,32 @@ def registerIspressed():
                     else:
                         regis.reg = 1
                         collection.insert_one({"_id":i,"username":regData.username.lower(),"password":regData.password, "highest_scores":0, "lastest_scores":0})
-                        logusername.destroy()
-                        RegEnUsername.destroy()
-                        regpassword.destroy()
-                        RegEnPassword.destroy()
-                        btnGoReg.destroy()
-                        btnBack.destroy()
+                        reset()
                         messagebox.showinfo(title="Success", message="Registered success!")
                         menu()
         else:
             messagebox.showerror(title="Error", message="Please enter all of entry")
 
-    
     btnLogin.destroy()
     btnRegister.destroy()
-    newQ.destroy()
-    correct.destroy()
-    wrong.destroy()
-    wrong_score.destroy()
+    nameLabel.destroy()
+    btnCredit.destroy()
     
-    
-    def goback():
+    def reset():
         logusername.destroy()
         RegEnUsername.destroy()
         regpassword.destroy()
         RegEnPassword.destroy()
         btnGoReg.destroy()
+        btnGoLog.destroy()
         btnBack.destroy()
+    
+    def goback():
+        reset()
         loginmenu()
         
     def goLog():
-        logusername.destroy()
-        RegEnUsername.destroy()
-        regpassword.destroy()
-        RegEnPassword.destroy()
-        btnGoLog.destroy()
-        btnGoReg.destroy()
-        btnBack.destroy()
+        reset()
         loginIspressed()
     
     logusername = customtkinter.CTkLabel(
@@ -1697,8 +1633,72 @@ def registerIspressed():
         command = goback)
     btnBack.place(relx=0.5, rely=0.75,anchor=customtkinter.CENTER)
 
+
+def btnCreditIsPressed():
+    btnLogin.destroy()
+    btnRegister.destroy()
+    nameLabel.destroy()
+    btnCredit.destroy()
+    def goback():
+        leadtext.destroy()
+        nameDev.destroy()
+        btnBack.destroy()
+        text.destroy()
+        loginmenu()
+
+    namelst = ["ภัทรพันธ์", "เตชินท์", "ภูษิตา", "ศึกษิต", "นิติรุจน์", "ณัฐชนน", "สุธางค์"]
+    lnamelst = ["ชูธรัตน์", "บุญยศ", "บุญยศ", "บุญยศ", "อโณทัยไพยูลย์", "ศรีศิริ", "สุขเรืองกูล"]
+    fnamelst = []
+    
+    for i in range(len(namelst)):
+        tab = "\t"
+        name = namelst[i]
+        lname = lnamelst[i]
+        fnamelst.append(f"{name}{tab}{lname}")
+    
+    leadtext = customtkinter.CTkLabel(
+        root,
+        text = "CREDIT",
+        text_font= ("Courier 35 bold underline"),
+        text_color='#FFD700'
+    )
+    leadtext.pack(pady=(30,10))
+    
+    text = customtkinter.CTkLabel(
+        root,
+        text = "♥ L Group Com Pro 1/65 ♥",
+        text_font= ("Courier 18 bold underline"),
+        text_color='#79ae61'
+    )
+    text.place(relx=0.5, rely=0.212, anchor=customtkinter.CENTER)
+
+    nameDev = customtkinter.CTkLabel(
+        root,
+        text=("\n".join(fnamelst)),
+        text_font= ("Courier 25"),
+        text_color='#eda850',
+        justify=tkinter.LEFT)
+    nameDev.place(relx=0.54, rely=0.5, relwidth=1, relheight=0.5, anchor=customtkinter.CENTER)
+            
+    btnBack = customtkinter.CTkButton(
+        master= root,
+        text= "Go Back",
+        text_font="Courier 10",
+        text_color="white",
+        hover= True,
+        hover_color= "black",
+        height=40,
+        width= 120,
+        border_width=2,
+        corner_radius=3,
+        border_color= "black", 
+        bg_color="#262626",
+        fg_color= "#262626",
+        command = goback)
+    btnBack.place(relx=0.5, rely=0.8,anchor=customtkinter.CENTER)
+    
 def loginmenu():
-    global btnLogin, btnRegister, newQ, correct, wrong, wrong_score
+    global btnLogin, btnRegister, nameLabel, newQ, correct, wrong, wrong_score, btnCredit
     btnLogin = customtkinter.CTkButton(
         master=root,
         text = "LOGIN",
@@ -1714,39 +1714,61 @@ def loginmenu():
         command = registerIspressed,
     )
     btnRegister.place(relx=0.48, rely=0.15, relwidth=0.14, relheight=0.05)
-
-    newQ = customtkinter.CTkLabel(
+    
+    nameLabel = customtkinter.CTkLabel(
         root,
-        text=f"Super Quiz V6.9", 
+        text= "Super Quiz BETA V6.9", 
         fg_color=("#262626"),
         corner_radius=6,
         text_font= ("Courier 16 bold")
     )
-    newQ.place(relx=0.5, rely=0.5, relwidth=0.7, relheight=0.23, anchor=customtkinter.CENTER)
-
+    nameLabel.place(relx=0.5, rely=0.5, relwidth=0.7, relheight=0.23, anchor=customtkinter.CENTER)
+    
+    newQ = customtkinter.CTkLabel(
+        root,
+        text="", 
+        fg_color=("#262626"),
+        corner_radius=6,
+        text_font= ("Courier 16 bold")
+    )
     correct = customtkinter.CTkLabel(
         master=root,
         text="",
         text_color="#79ae61",
         fg_color=("#262626"),
-        text_font= ("Courier 16 bold"))
-    correct.place(relx=0.5, rely=0.55, relwidth=0.1, relheight=0.05, anchor=customtkinter.CENTER)
-
+        text_font= ("Courier 16 bold")
+    )
     wrong = customtkinter.CTkLabel(
         master=root,
         text="",
         text_color="#79ae61",
         fg_color=("#262626"),
-        text_font= ("Courier 16 bold"))
-    wrong.place(relx=0.5, rely=0.55, relwidth=0.1, relheight=0.05, anchor=customtkinter.CENTER)
-
+        text_font= ("Courier 16 bold")
+    )
     wrong_score = customtkinter.CTkLabel(
         master=root,
         text="",
         text_color="#79ae61",
         fg_color=("#262626"),
-        text_font= ("Courier 16 bold"))
-    wrong_score.place(relx=0.5, rely=0.55, relwidth=0.1, relheight=0.05, anchor=customtkinter.CENTER)
+        text_font= ("Courier 16 bold")
+    )
+    
+    btnCredit = customtkinter.CTkButton(
+        master= root,
+        text= "CREDIT",
+        text_font="none 10",
+        text_color="white",
+        hover= True,
+        hover_color= "#79ae61",
+        height=40,
+        width= 120,
+        border_width=2,
+        corner_radius=3,
+        border_color= "#79ae61", 
+        bg_color="#262626",
+        fg_color= "#262626",
+        command = btnCreditIsPressed)
+    btnCredit.place(relx=0.5, rely=0.9,anchor=customtkinter.CENTER)
 
 loginmenu()
 root.mainloop()

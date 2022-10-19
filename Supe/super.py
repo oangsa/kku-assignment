@@ -1,4 +1,3 @@
-from cgitb import text
 import tkinter
 import customtkinter
 import string, tkinter, secrets, time, threading
@@ -56,7 +55,7 @@ def easyStart():
                 value = "%.2f" % value
                 try:
                     if 'normal' == root.state():
-                        if float(value) > 0.99:
+                        if float(value) > 0.98:
                             try_again()
                     else:
                         break
@@ -317,7 +316,7 @@ def normalStart():
                 # print(value)
                 try:
                     if 'normal' == root.state():
-                        if float(value) > 0.99:
+                        if float(value) > 0.98:
                             try_again()
                     else:
                         break
@@ -590,7 +589,7 @@ def hardStart():
                 # print(value)
                 try:
                     if 'normal' == root.state():
-                        if float(value) > 0.99:
+                        if float(value) > 0.98:
                             try_again()
                     else:
                         break
